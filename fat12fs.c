@@ -19,7 +19,7 @@
 #endif
 
 #if FATDEBUG
-#define debug_print(...) fprintf(stderr, __VA_ARGS)
+#define debug_print(...) fprintf(stderr, __VA_ARGS__)
 #else
 #define debug_print(...) ((void) 0)
 #endif
