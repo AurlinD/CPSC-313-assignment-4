@@ -50,17 +50,17 @@ file. If working in pairs both of you must do this.
 
 
 STUDENT  1
-Name :Aurlin Dhillon
-St. No:37055134
-Unix Id :c0f0b
-Email:aurlindhillon@gmail.com
+Name : Aurlin Dhillon
+St. No: 37055134
+Unix Id : c0f0b
+Email: aurlindhillon@gmail.com
 
 
 STUDENT  2
-Name :
-St. No:
-Unix Id :
-Email:
+Name : Steven Gao
+St. No: 16902141
+Unix Id : e1d0b
+Email: sgao1996@gmail.com
 
 
 ACKNOWLEDGMENTS :
