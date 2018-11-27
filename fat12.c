@@ -44,9 +44,12 @@ unsigned int read_unsigned_le(const char *buffer, int position, int num_bytes) {
      smaller than necessary.
  */
 fat12volume *open_volume_file(const char *filename) {
-  
+  FILE * fatd; 
   /* TO BE COMPLETED BY THE STUDENT */
-  return NULL;
+  fd = fopen(filename,"r");
+  return fd;
+
+
 }
 
 /* close_volume_file: Frees and closes all resources used by a FAT12 volume.
