@@ -90,10 +90,16 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
 		 unsigned int num_sectors, char **buffer) {
   
   /* TO BE COMPLETED BY THE STUDENT */
+  // unsigned int number = read_unsigned_le(**buffer, first_sector, num_sectors*512);
+  // for (int i = 0 ; i< volume.size() ; i++){
 
-
-  return read_unsigned_le(**buffer, first_sector, num_sectors*512);
-   
+  
+  if ((number == NULL) || (num_sectors == 0)) {
+    return 0;
+  } else {
+    buffer = malloc(num_sectors*512);
+    return num_sectors*512;
+  }
 }
 
 /* read_cluster: Reads a specific data cluster from the volume file,
