@@ -63,6 +63,7 @@ fat12volume *open_volume_file(const char *filename) {
 void close_volume_file(fat12volume *volume) {
 
   /* TO BE COMPLETED BY THE STUDENT */
+  fclose(volume);
 }
 
 /* read_sectors: Reads one or more contiguous sectors from the volume
