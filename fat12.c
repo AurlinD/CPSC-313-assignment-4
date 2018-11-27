@@ -43,7 +43,7 @@ unsigned int read_unsigned_le(const char *buffer, int position, int num_bytes) {
      smaller than necessary.
  */
 fat12volume *open_volume_file(const char *filename) {
-  *pointer = NULL;
+  int *pointer = NULL;
   /* TO BE COMPLETED BY THE STUDENT */
   if (*filename != NULL){
     *pointer = read_unsigned_le(*filename, 0, 512);
