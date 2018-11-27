@@ -90,9 +90,9 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
 		 unsigned int num_sectors, char **buffer) {
   
   /* TO BE COMPLETED BY THE STUDENT */
-  int *pointer = NULL;
 
-  return read_unsigned_le(**buffer, first_sector, num_sectors);
+
+  return read_unsigned_le(**buffer, first_sector, num_sectors*512);
    
 }
 
