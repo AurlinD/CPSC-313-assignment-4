@@ -44,14 +44,14 @@ unsigned int read_unsigned_le(const char *buffer, int position, int num_bytes) {
      smaller than necessary.
  */
 fat12volume *open_volume_file(const char *filename) {
-  // FILE * fatd; 
-  // /* TO BE COMPLETED BY THE STUDENT */
-  // if (*filename != NULL){
-  // fatd = fopen(filename,"r");
-  // return fatd;
-  // }
-  // fprintf(stderr, "File is NULL\n");
-  return NULL;
+  FILE * fatd; 
+  /* TO BE COMPLETED BY THE STUDENT */
+  if (*filename != NULL){
+  fatd = fopen(filename,"r");
+  return fatd;
+  }
+  fprintf(stderr, "File is NULL\n");
+  return fatd;
 
 }
 
@@ -61,9 +61,9 @@ fat12volume *open_volume_file(const char *filename) {
      volume: pointer to volume to be freed.
  */
 void close_volume_file(fat12volume *volume) {
-  //fclose(volume);
+  
   /* TO BE COMPLETED BY THE STUDENT */
-
+ fclose(volume);
 }
 
 /* read_sectors: Reads one or more contiguous sectors from the volume
