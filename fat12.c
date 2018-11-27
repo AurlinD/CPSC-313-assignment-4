@@ -45,7 +45,7 @@ unsigned int read_unsigned_le(const char *buffer, int position, int num_bytes) {
  */
 fat12volume *open_volume_file(const char *filename) {
   FILE * fatd; 
-  /* TO BE COMPLETED BY THE STUDENT */
+  // do not have file is smaller than necassary, or data is missing**********************
   if (*filename != NULL){
   fatd = fopen(filename,"r");
   return fatd;
@@ -63,6 +63,7 @@ fat12volume *open_volume_file(const char *filename) {
 void close_volume_file(fat12volume *volume) {
   
   /* TO BE COMPLETED BY THE STUDENT */
+
  fclose(volume);
 }
 
@@ -89,7 +90,10 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
 		 unsigned int num_sectors, char **buffer) {
   
   /* TO BE COMPLETED BY THE STUDENT */
-  return 0;
+  int *pointer = NULL;
+
+  return read_unsigned_le(**buffer, first_sector, num_sectors);
+   
 }
 
 /* read_cluster: Reads a specific data cluster from the volume file,
