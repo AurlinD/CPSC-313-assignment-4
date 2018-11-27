@@ -46,9 +46,12 @@ unsigned int read_unsigned_le(const char *buffer, int position, int num_bytes) {
 fat12volume *open_volume_file(const char *filename) {
   FILE * fatd; 
   /* TO BE COMPLETED BY THE STUDENT */
+  if (*filename != NULL){
   fatd = fopen(filename,"r");
   return fatd;
-
+  }
+  fprintf(stderr, "File is NULL\n");
+  return NULL;
 
 }
 
