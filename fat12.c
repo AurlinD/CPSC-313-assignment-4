@@ -49,15 +49,17 @@ fat12volume *open_volume_file(const char *filename) {
   // do not have file is smaller than necassary, or data is missing**********************
   if (*filename != NULL){
     fatd = fopen(filename,"r");
-    sector_size = read_unsigned_le(B, 11, 1);
-    cluster_size = read_unsigned_le(B, 13, 0);
+    unsigned int sector_size = read_unsigned_le(B, 11, 1);
+    unsigned intcluster_size = read_unsigned_le(B, 13, 0);
     fat12volume fat = { .sector_size = sector_size, .cluster_size = cluster_offset};
+
+    fatd-> &fat;
 
     fprintf(stderr, "Sector_size value is", sector_size); 
     fprintf(stderr, "Cluster_size value is", cluster_size); 
 
     
-    return fat
+    return fatd
   //return fatd;
   }
   fprintf(stderr, "File is NULL\n");
