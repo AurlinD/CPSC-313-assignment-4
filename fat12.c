@@ -132,7 +132,7 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
 int read_cluster(fat12volume *volume, unsigned int cluster, char **buffer) {
 
   /* TO BE COMPLETED BY THE STUDENT */
-  unsigned int clusterNumber = read_unsigned_le(**buffer, )
+  //unsigned int clusterNumber = read_unsigned_le(**buffer, )
   return 0;
 }
 
