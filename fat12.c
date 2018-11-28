@@ -50,8 +50,8 @@ fat12volume *open_volume_file(const char *filename) {
   if (*filename != NULL){
     fatd = fopen(filename,"r");
     unsigned int sector_size = read_unsigned_le(B, 11, 1);
-    unsigned intcluster_size = read_unsigned_le(B, 13, 0);
-    fat12volume fat = { .sector_size = sector_size, .cluster_size = cluster_offset};
+    unsigned int cluster_size = read_unsigned_le(B, 13, 0);
+    fat12volume fat = { .sector_size = sector_size, .cluster_size = cluster_size};
 
     fatd-> &fat;
 
