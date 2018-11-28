@@ -53,13 +53,13 @@ fat12volume *open_volume_file(const char *filename) {
     unsigned int cluster_size = read_unsigned_le(B, 13, 0);
     fat12volume fat = { .sector_size = sector_size, .cluster_size = cluster_size};
 
-    fatd-> &fat;
+    fatd = &fat;
 
     fprintf(stderr, "Sector_size value is", sector_size); 
     fprintf(stderr, "Cluster_size value is", cluster_size); 
 
     
-    return fatd
+    return fatd;
   //return fatd;
   }
   fprintf(stderr, "File is NULL\n");
@@ -158,7 +158,7 @@ unsigned int get_next_cluster(fat12volume *volume, unsigned int cluster) {
   // if cluster is odd valued
 
 
-  }
+  
   /* TO BE COMPLETED BY THE STUDENT */
   return 0;
 }
