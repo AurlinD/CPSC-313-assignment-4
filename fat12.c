@@ -44,14 +44,22 @@ unsigned int read_unsigned_le(const char *buffer, int position, int num_bytes) {
      smaller than necessary.
  */
 fat12volume *open_volume_file(const char *filename) {
-  FILE * fatd; 
+  FILE * fatd;
+  char B; 
   // do not have file is smaller than necassary, or data is missing**********************
   if (*filename != NULL){
   fatd = fopen(filename,"r");
-  return fatd;
+  unsigned int sector_size = read_unsigned_le(B, 11, 1);
+  unsigned int cluster_size = read_unsigned_le(B, 13, 0);
+  fprintf(stderr, "Sector_size value is", sector_size); 
+  fprintf(stderr, "Cluster_size value is", cluster_size); 
+
+  fat12volume fat = [sector_size, cluster_size]
+
+  //return fatd;
   }
   fprintf(stderr, "File is NULL\n");
-  return fatd;
+  //return fatd;
 
 }
 
@@ -91,9 +99,7 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
   
   /* TO BE COMPLETED BY THE STUDENT */
   unsigned int number = read_unsigned_le(**buffer, first_sector, num_sectors*512);
-  // for (int i = 0 ; i< volume.size() ; i++){
 
-  
   if ((number == NULL) || (num_sectors == 0)) {
     return 0;
   } else {
@@ -125,6 +131,7 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
 int read_cluster(fat12volume *volume, unsigned int cluster, char **buffer) {
 
   /* TO BE COMPLETED BY THE STUDENT */
+  unsigned int clusterNumber = read_unsigned_le(**buffer, )
   return 0;
 }
 
@@ -142,7 +149,12 @@ int read_cluster(fat12volume *volume, unsigned int cluster, char **buffer) {
      file.
  */
 unsigned int get_next_cluster(fat12volume *volume, unsigned int cluster) {
+  unsigned char entry[2];
+  uint32_t new_cluster;
+  // if cluster is odd valued
 
+
+  }
   /* TO BE COMPLETED BY THE STUDENT */
   return 0;
 }
