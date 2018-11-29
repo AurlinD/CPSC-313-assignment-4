@@ -51,13 +51,13 @@ fat12volume *open_volume_file(const char *filename) {
   // do not have file is smaller than necassary, or data is missing**********************
   if (*filename != NULL){
 
-
+    char* buff = (char*) malloc(BOOT_SECTOR_SIZE);
     //setbuffer(fatd, buff, sizeof(struct fat12volume));
-    fseek(fatd,0,SEEK_END);
-    int size = ftell(fatd);
-    fseek(fatd,0,SEEK_SET);
-    char * buff = malloc(size);
-    setbuffer(fatd, buff,size);
+    // fseek(fatd,0,SEEK_END);
+    // int size = ftell(fatd);
+    // fseek(fatd,0,SEEK_SET);
+    // char * buff = malloc(size);
+    // setbuffer(fatd, buff,size);
 
 
     fat->sector_size = read_unsigned_le(buff, 11, 1);
@@ -66,8 +66,8 @@ fat12volume *open_volume_file(const char *filename) {
     fat->hidden_sectors = read_unsigned_le(buff, 28, 1);
 
     //*fat = { .sector_size = sector_size, .cluster_size = cluster_size};
-    fprintf(stderr, "Sector_size value is", fat->sector_size); 
-    fprintf(stderr, "Cluster_size value is", fat->cluster_size); 
+    //fprintf(stderr, "Sector_size value is", fat->sector_size); 
+    //fprintf(stderr, "Cluster_size value is", fat->cluster_size); 
 
     
     return fat;
