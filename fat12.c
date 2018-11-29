@@ -108,15 +108,16 @@ fat12volume *open_volume_file(const char *filename) {
         return fat;
     }
 
-    if((fat->rootdir_num_sectors = fat->array / fat->sector_size) == NULL){
-        fprintf(stderr, "File is NULL\n");
-        return fat;
-    }
-
     if(fat->rootdir_array = read_unsigned_le(buff, 0 , 32) == NULL){
         fprintf(stderr, "File is NULL\n");
         return fat;
     }
+
+    if((fat->rootdir_num_sectors = fat->rootdir_array / fat->sector_size) == NULL){
+        fprintf(stderr, "File is NULL\n");
+        return fat;
+    }
+
     if((fat->cluster_offset = fat-> cluster_size / fat->sector_size) == NULL){
         fprintf(stderr, "File is NULL\n");
         return fat;
