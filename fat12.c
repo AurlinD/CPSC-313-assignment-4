@@ -240,7 +240,7 @@ unsigned int get_next_cluster(fat12volume *volume, unsigned int cluster) {
     memcpy(&new_cluster, &entry[0], 2);   
   }
   if ((new_cluster > 2) && (new_cluster > 4079)){
-      return new_cluster
+      return new_cluster;
   }
 
   return 0;
