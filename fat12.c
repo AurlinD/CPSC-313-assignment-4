@@ -74,10 +74,10 @@ fat12volume *open_volume_file(const char *filename) {
     // fprintf(stderr, "Cluster_size value is", cluster_size); 
 
     
-    return fat
+    return fat;
   }
   fprintf(stderr, "File is NULL\n");
-  return fat
+  return fat;
 
 }
 
