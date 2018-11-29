@@ -66,8 +66,8 @@ fat12volume *open_volume_file(const char *filename) {
     fat->hidden_sectors = read_unsigned_le(buff, 28, 1);
 
     //*fat = { .sector_size = sector_size, .cluster_size = cluster_size};
-    fprintf(stderr, "Sector_size value is", sector_size); 
-    fprintf(stderr, "Cluster_size value is", cluster_size); 
+    fprintf(stderr, "Sector_size value is", fat->sector_size); 
+    fprintf(stderr, "Cluster_size value is", fat->cluster_size); 
 
     
     return fat;
