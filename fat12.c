@@ -45,25 +45,34 @@ unsigned int read_unsigned_le(const char *buffer, int position, int num_bytes) {
  */
 fat12volume *open_volume_file(const char *filename) {
   FILE * fatd;
-  char B; 
+  char buff;
+
   // do not have file is smaller than necassary, or data is missing**********************
   if (*filename != NULL){
     fatd = fopen(filename,"r");
-    unsigned int sector_size = read_unsigned_le(B, 11, 1);
-    unsigned int cluster_size = read_unsigned_le(B, 13, 0);
-    fat12volume fat = { .sector_size = sector_size, .cluster_size = cluster_size};
+    struct fat12volume *fat = malloc(sizeof(struct fat12volume));
+    setbuffer(fatd, buff, sizeof(struct fat12volume));
+    // fseek(f,0,SEEK_END);
+    // size = ftell(f)
+    // fseek(f,0,SEEK_SET)
+    // char* buff = malloc size;
+    // setbuffer(fatd, buff,size)
 
-    fatd = &fat;
+
+    unsigned int sector_size = read_unsigned_le(buff, 11, 1);
+    unsigned int cluster_size = read_unsigned_le(buff, 13, 0);
+    *fat = { .sector_size = sector_size, .cluster_size = cluster_size};
+
+  
 
     fprintf(stderr, "Sector_size value is", sector_size); 
     fprintf(stderr, "Cluster_size value is", cluster_size); 
 
     
-    return fatd;
-  //return fatd;
+    return *fat
   }
   fprintf(stderr, "File is NULL\n");
-  //return fatd;
+  return fatd
 
 }
 
