@@ -60,10 +60,18 @@ fat12volume *open_volume_file(const char *filename) {
     // setbuffer(fatd, buff,size);
 
 
-    fat->sector_size = read_unsigned_le(buff, 11, 1);
-    fat->cluster_size = read_unsigned_le(buff, 13, 0);
-    fat->reserved_sectors = read_unsigned_le(buff, 14, 0);
-    fat->hidden_sectors = read_unsigned_le(buff, 28, 1);
+    fat->sector_size = read_unsigned_le(buff, 11, 2);
+    fat->cluster_size = read_unsigned_le(buff, 13, 1);
+    fat->reserved_sectors = read_unsigned_le(buff, 14, 1);
+    fat->hidden_sectors = read_unsigned_le(buff, 28, 2);
+    fat->fat_offset = fat->reserved_sectors;
+    fat->fat_num_sectors = read_unsigned_le(buff, 22, 2);
+    //fat->fat_copies = 
+    //fat->rootdir_array = 
+    //fat->cluster_offset = 
+
+
+
 
     //*fat = { .sector_size = sector_size, .cluster_size = cluster_size};
     //fprintf(stderr, "Sector_size value is", fat->sector_size); 
