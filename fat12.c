@@ -66,7 +66,7 @@ fat12volume *open_volume_file(const char *filename) {
     fat->rootdir_size = read_unsigned_le(buff , 17, 1);
     fat->hidden_sectors = read_unsigned_le(buff, 28, 1);
 
-    *fat = { .sector_size = sector_size, .cluster_size = cluster_size};
+    //*fat = { .sector_size = sector_size, .cluster_size = cluster_size};
 
   
 
