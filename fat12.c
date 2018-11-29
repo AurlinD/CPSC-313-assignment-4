@@ -52,7 +52,7 @@ fat12volume *open_volume_file(const char *filename) {
   if (*filename != NULL){
 
 
-    setbuffer(fatd, buff, sizeof(struct fat12volume));
+    //setbuffer(fatd, buff, sizeof(struct fat12volume));
     // fseek(f,0,SEEK_END);
     // size = ftell(f)
     // fseek(f,0,SEEK_SET)
@@ -63,7 +63,6 @@ fat12volume *open_volume_file(const char *filename) {
     fat->sector_size = read_unsigned_le(buff, 11, 1);
     fat->cluster_size = read_unsigned_le(buff, 13, 0);
     fat->reserved_sectors = read_unsigned_le(buff, 14, 0);
-    //fat->rootdir_size = read_unsigned_le(buff , 17, 1);
     fat->hidden_sectors = read_unsigned_le(buff, 28, 1);
 
     //*fat = { .sector_size = sector_size, .cluster_size = cluster_size};
