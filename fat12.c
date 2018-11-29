@@ -228,17 +228,17 @@ unsigned int get_next_cluster(fat12volume *volume, unsigned int cluster) {
   uint32_t next_cluster;
   // if cluster is odd valued, last half of the array 
   if (cluster % 2){
-    &entry[0] = &volume[volume->fat_offset + ((cluster/2) * 3)];
-    &entry[1] = &volume[volume->fat_offset + ((cluster/2) * 3) +1];
-    &next_cluster = &entry[0];
+    *entry[0] = &volume[volume->fat_offset + ((cluster/2) * 3)];
+    *entry[1] = &volume[volume->fat_offset + ((cluster/2) * 3) +1];
+    *next_cluster = &entry[0];
     next_cluster = next_cluster>>4;
   }
   // cluster is even in this case, first half of array
   else{
-    &entry[0] = &volume[volume->fat_offset + ((cluster/2) * 3)];
-    &entry[1] = &volume[volume->fat_offset + ((cluster/2) * 3) + 1];
+    *entry[0] = &volume[volume->fat_offset + ((cluster/2) * 3)];
+    *entry[1] = &volume[volume->fat_offset + ((cluster/2) * 3) + 1];
     entry[1] = entry[1]&0x0f;
-    &next_cluster = &entry[0];
+    *next_cluster = &entry[0];
   }
   if ((next_cluster > 2) && (next_cluster > 4079)) {
       return next_cluster;
