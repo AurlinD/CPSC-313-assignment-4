@@ -59,7 +59,7 @@ fat12volume *open_volume_file(const char *filename) {
     // setbuffer(fatd, buff,size);
 
     
-    if (fat->sector_size = read_unsigned_le(buff, 11, 2) == NULL){
+    if (fat->sector_size = read_unsigned_le(buff, 11, 1) == NULL){
         fprintf(stderr, "File is NULL 1\n");
         return fat; 
     }
@@ -133,7 +133,7 @@ fat12volume *open_volume_file(const char *filename) {
     
     return fat;
   }
-  fprintf(stderr, "File is NULL\n");
+  fprintf(stderr, "File is NULL 14\n");
   return fat;
 
 }
