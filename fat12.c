@@ -54,9 +54,9 @@ fat12volume *open_volume_file(const char *filename) {
 
     //setbuffer(fatd, buff, sizeof(struct fat12volume));
     fseek(f,0,SEEK_END);
-    size = ftell(f);
+    int size = ftell(f);
     fseek(f,0,SEEK_SET);
-    char * buff = malloc size;
+    char * buff = malloc(size);
     setbuffer(fatd, buff,size);
 
 
