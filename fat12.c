@@ -227,15 +227,15 @@ unsigned int get_next_cluster(fat12volume *volume, unsigned int cluster) {
   uint32_t new_cluster;
   // if cluster is odd valued, last half of the array 
   if (cluster % 2){
-    memcpy(&entry[0], &volume[*volume->fat_offset + ((cluster/2) * 3)], 1);
-    memcpy(&entry[1], &volume[*volume->fat_offset + ((cluster/2) * 3) +1], 1);
+    memcpy(&entry[0], &volume[volume->fat_offset + ((cluster/2) * 3)], 1);
+    memcpy(&entry[1], &volume[volume->fat_offset + ((cluster/2) * 3) +1], 1);
     memcpy(&new_cluster, &entry[0], 2);
     new_cluster = new_cluster>>4;
   }
   // cluster is even in this case, first half of array
   else{
-    memcpy(&entry[0], &volume[*volume->fat_offset + ((cluster/2) * 3)], 1);
-    memcpy(&entry[1], &volume[*volume->fat_offset + ((cluster/2) * 3) + 1], 1);
+    memcpy(&entry[0], &volume[volume->fat_offset + ((cluster/2) * 3)], 1);
+    memcpy(&entry[1], &volume[volume->fat_offset + ((cluster/2) * 3) + 1], 1);
     entry[1] = entry[1]&0x0f;
     memcpy(&new_cluster, &entry[0], 2);   
   }
