@@ -48,7 +48,6 @@ fat12volume *open_volume_file(const char *filename) {
   char buff;
   fatd = fopen(filename,"r");
   struct fat12volume *fat = malloc(sizeof(struct fat12volume));
-  // do not have file is smaller than necassary, or data is missing**********************
   if (*filename != NULL){
 
     char* buff = (char*) malloc(BOOT_SECTOR_SIZE);
@@ -59,20 +58,69 @@ fat12volume *open_volume_file(const char *filename) {
     // char * buff = malloc(size);
     // setbuffer(fatd, buff,size);
 
+    
+    if (fat->sector_size = read_unsigned_le(buff, 11, 2) == NULL){
+        fprintf(stderr, "File is NULL\n");
+        return fat; 
+    }
 
-    fat->sector_size = read_unsigned_le(buff, 11, 2);
-    fat->cluster_size = read_unsigned_le(buff, 13, 1);
-    fat->reserved_sectors = read_unsigned_le(buff, 14, 1);
-    fat->hidden_sectors = read_unsigned_le(buff, 28, 2);
-    fat->fat_num_sectors = read_unsigned_le(buff, 22, 2);
-    fat->fat_copies = read_unsigned_le(buff, 16 , 1);
-    fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies;
-    fat->fat_array = read_unsigned_le(buff, 0, 512);
-    fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies; 
-    fat->rootdir_entries = fat->sector_size / 32;
-    fat->rootdir_num_sectors = fat->array / fat->sector_size; 
-    fat->rootdir_array = read_unsigned_le(buff, 0 , 32);
-    fat->cluster_offset = fat-> cluster_size / fat->sector_size;
+    if(fat->cluster_size = read_unsigned_le(buff, 13, 1) == NULL){
+        fprintf(stderr, "File is NULL\n");
+        return fat;
+    }
+
+    if(fat->reserved_sectors = read_unsigned_le(buff, 14, 1) == NULL){
+        fprintf(stderr, "File is NULL\n");
+        return fat;
+    }
+
+    if(fat->hidden_sectors = read_unsigned_le(buff, 28, 2) == NULL){
+        fprintf(stderr, "File is NULL\n");
+        return fat;
+    }
+
+    if(fat->fat_num_sectors = read_unsigned_le(buff, 22, 2) == NULL){
+        fprintf(stderr, "File is NULL\n");
+        return fat;
+    };
+
+    if(fat->fat_copies = read_unsigned_le(buff, 16 , 1) == NULL){
+        fprintf(stderr, "File is NULL\n");
+        return fat;
+    };
+
+    if((fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies) == NULL){
+        fprintf(stderr, "File is NULL\n");
+        return fat;
+    }
+
+    if(fat->fat_array = read_unsigned_le(buff, 0, 512) == NULL){
+        fprintf(stderr, "File is NULL\n");
+        return fat;
+    }
+
+    if((fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies) == NULL){
+        fprintf(stderr, "File is NULL\n");
+        return fat;
+    } 
+    if((fat->rootdir_entries = fat->sector_size / 32) == NULL){
+        fprintf(stderr, "File is NULL\n");
+        return fat;
+    }
+
+    if((fat->rootdir_num_sectors = fat->array / fat->sector_size) == NULL){
+        fprintf(stderr, "File is NULL\n");
+        return fat;
+    }
+
+    if(fat->rootdir_array = read_unsigned_le(buff, 0 , 32) == NULL){
+        fprintf(stderr, "File is NULL\n");
+        return fat;
+    }
+    if((fat->cluster_offset = fat-> cluster_size / fat->sector_size) == NULL){
+        fprintf(stderr, "File is NULL\n");
+        return fat;
+    }
 
 
 
@@ -177,11 +225,24 @@ int read_cluster(fat12volume *volume, unsigned int cluster, char **buffer) {
 unsigned int get_next_cluster(fat12volume *volume, unsigned int cluster) {
   unsigned char entry[2];
   uint32_t new_cluster;
-  // if cluster is odd valued
+  // if cluster is odd valued, last half of the array 
+  if (cluster % 2){
+    memcpy(&entry[0], &volume[*volume->fat_offset + ((cluster/2) * 3)], 1);
+    memcpy(&entry[1], &volume[*volume->fat_offset + ((cluster/2) * 3) +1], 1);
+    memcpy(&new_cluster, &entry[0], 2);
+    new_cluster = new_cluster>>4;
+  }
+  // cluster is even in this case, first half of array
+  else{
+    memcpy(&entry[0], &volume[*volume->fat_offset + ((cluster/2) * 3)], 1);
+    memcpy(&entry[1], &volume[*volume->fat_offset + ((cluster/2) * 3) + 1], 1);
+    entry[1] = entry[1]&0x0f;
+    memcpy(&new_cluster, &entry[0], 2);   
+  }
+  if ((new_cluster > 2) && (new_cluster > 4079)){
+      return new_cluster
+  }
 
-
-  
-  /* TO BE COMPLETED BY THE STUDENT */
   return 0;
 }
 
