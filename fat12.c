@@ -113,7 +113,7 @@ fat12volume *open_volume_file(const char *filename) {
         return fat;
     }
 
-    if((fat->rootdir_num_sectors  = (fat->rootdir_entries / fat->sector_size) == NULL){
+    if(fat->rootdir_num_sectors  = (fat->rootdir_entries / fat->sector_size) == NULL){
         fprintf(stderr, "File is NULL\n");
         return fat;
     }
