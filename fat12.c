@@ -60,7 +60,7 @@ fat12volume *open_volume_file(const char *filename) {
     // setbuffer(fatd, buff,size);
 
 
-    fat->volume_file = *fatd;
+    fat->volume_file = fatd;
     
     fat->sector_size = read_unsigned_le(buff, 11, 2);
 
@@ -76,7 +76,7 @@ fat12volume *open_volume_file(const char *filename) {
 
     fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies;
 
-    fat->fat_array = read_sectors(fat->volume_file, 1, fat->fat_num_sectors, buff);
+    //fat->fat_array = read_sectors(fat->volume_file, 1, fat->fat_num_sectors, buff);
 
     fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies;
 
@@ -84,7 +84,7 @@ fat12volume *open_volume_file(const char *filename) {
 
     fat->rootdir_num_sectors  = (fat->rootdir_entries / fat->sector_size);
 
-    fat->rootdir_array = read_sectors(fat->volume_file, 1, fat->rootdir_num_sectors, buff);
+    //fat->rootdir_array = read_sectors(fat->volume_file, 1, fat->rootdir_num_sectors, buff);
 
     fat->cluster_offset = (fat->cluster_size / fat->sector_size);
 
@@ -134,8 +134,7 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
   fseek(volume->volume_file, first_sector, SEEK_SET);
   fread(buffer, volume->sector_size, num_sectors, volume->volume_file);
   rewind(volume->volume_file);
-    // cluster size is in sectors
-  unsigned int number = read_unsigned_le(**buffer, first_sector * volume->sector_size, num_sectors*512);
+
   if (buffer == NULL || num_sectors == 0) {
     *buffer = NULL;
     return 0;
