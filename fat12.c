@@ -59,11 +59,12 @@ fat12volume *open_volume_file(const char *filename) {
     // char * buff = malloc(size);
     // setbuffer(fatd, buff,size);
 
+
+    fat->volume_file = *fatd;
     
     fat->sector_size = read_unsigned_le(buff, 11, 2);
 
     fat->cluster_size = read_unsigned_le(buff, 13, 1);
-
 
     fat->reserved_sectors = read_unsigned_le(buff, 14, 2);
 
@@ -75,7 +76,7 @@ fat12volume *open_volume_file(const char *filename) {
 
     fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies;
 
-    fat->fat_array = read_unsigned_le(buff, 0, 512);
+    fat->fat_array = read_sectors(fat->volume_file, 1, fat->fat_num_sectors, buff);
 
     fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies;
 
@@ -129,15 +130,17 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
 		 unsigned int num_sectors, char **buffer) {
   
   /* TO BE COMPLETED BY THE STUDENT */
-  buffer = (char*) malloc(sizeof(struct fat12volume));
+  buffer = (char*) malloc(num_sectors * volume->sector_size);
+  fseek(volume->volume_file, first_sector, SEEK_SET);
+  fread(buffer, volume->sector_size, num_sectors, volume->volume_file);
+  rewind(volume->volume_file);
+    // cluster size is in sectors
   unsigned int number = read_unsigned_le(**buffer, first_sector * volume->sector_size, num_sectors*512);
-
-
-  if ((number == NULL) || (num_sectors == 0)) {
+  if (buffer == NULL || num_sectors == 0) {
+    *buffer = NULL;
     return 0;
   } else {
-    buffer = malloc(num_sectors*512);
-    return num_sectors*512;
+    return sizeof(buffer);
   }
 }
 
@@ -166,9 +169,10 @@ int read_cluster(fat12volume *volume, unsigned int cluster, char **buffer) {
   /* TO BE COMPLETED BY THE STUDENT */
     *buffer = (char*) malloc(sizeof(struct fat12volume));
     // use fseek ()
+    // fseek(volume, cluster * volume->cluster_size)
     // use fread 
     // cluster size is in sectors
-    setbuf(volume, buffer);
+    // setbuf(volume, buffer);
     char clusterData = read_unsigned_le(**buffer, (cluster + 2) * volume->cluster_size, volume->cluster_size);
     if (clusterData != 0) {
         *buffer = (char*) malloc(sizeof(clusterData));
