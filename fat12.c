@@ -80,9 +80,9 @@ fat12volume *open_volume_file(const char *filename) {
 
     fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies;
 
-    fat->rootdir_entries = fat->sector_size / 32;
+    fat->rootdir_entries = read_unsigned_le(buff, 17 , 2);
 
-    fat->rootdir_num_sectors  = (fat->rootdir_entries / fat->sector_size);
+    fat->rootdir_num_sectors  = (fat->rootdir_entries * 32 / fat->sector_size);
 
     //fat->rootdir_array = read_sectors(fat->volume_file, 1, fat->rootdir_num_sectors, buff);
 
@@ -130,7 +130,7 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
 		 unsigned int num_sectors, char **buffer) {
   
   /* TO BE COMPLETED BY THE STUDENT */
-  buffer = (char*) malloc(num_sectors * volume->sector_size);
+  *buffer = (char*) malloc(num_sectors * volume->sector_size);
   fseek(volume->volume_file, first_sector, SEEK_SET);
   fread(buffer, volume->sector_size, num_sectors, volume->volume_file);
   rewind(volume->volume_file);
@@ -166,19 +166,22 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
 int read_cluster(fat12volume *volume, unsigned int cluster, char **buffer) {
 
   /* TO BE COMPLETED BY THE STUDENT */
-    *buffer = (char*) malloc(sizeof(struct fat12volume));
     // use fseek ()
     // fseek(volume, cluster * volume->cluster_size)
     // use fread 
     // cluster size is in sectors
     // setbuf(volume, buffer);
-    char clusterData = read_unsigned_le(**buffer, (cluster + 2) * volume->cluster_size, volume->cluster_size);
-    if (clusterData != 0) {
-        *buffer = (char*) malloc(sizeof(clusterData));
-        return sizeof(clusterData);
+    *buffer = (char*) malloc(volume->cluster_size);
+    fseek(volume->volume_file, cluster, SEEK_SET);
+    fread(buffer, volume->cluster_size, 1, volume->volume_file);
+    rewind(volume->volume_file);
+
+    if (buffer == NULL) {
+      *buffer = NULL;
+      return 0;
+    } else {
+      return sizeof(buffer);
     }
-    //buffer = NULL;
-    return 0;
 }
 
 /* get_next_cluster: Finds, in the file allocation table, the number
