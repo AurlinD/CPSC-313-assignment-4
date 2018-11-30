@@ -206,7 +206,7 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
 int read_cluster(fat12volume *volume, unsigned int cluster, char **buffer) {
 
   /* TO BE COMPLETED BY THE STUDENT */
-    **buffer = (char*) malloc(sizeof(struct(fat12volume)));
+    **buffer = (char*) malloc(sizeof(struct(fat12volume));
 
     setbuff(*volume, **buffer);
     char clusterData = read_unsigned_le(**buffer, (cluster + 2) * volume->cluster_size, volume->cluster_size);
