@@ -212,7 +212,6 @@ int read_cluster(fat12volume *volume, unsigned int cluster, char **buffer) {
         return sizeof(clusterData);
     }
 
-  //unsigned int clusterNumber = read_unsigned_le(**buffer, )
   return 0;
 }
 
@@ -231,21 +230,21 @@ int read_cluster(fat12volume *volume, unsigned int cluster, char **buffer) {
  */
 unsigned int get_next_cluster(fat12volume *volume, unsigned int cluster) {
   unsigned char entry[2];
-  uint32_t next_cluster;
+  uint32_t new_cluster;
   // if cluster is odd valued, last half of the array 
-  if (cluster % 2){
-    entry[0] = &volume[volume->fat_offset + cluster];
-    entry[1] = &volume[volume->fat_offset + cluster];
-    next_cluster = &entry[0];
-    next_cluster = next_cluster>>4;
-  }
-  // cluster is even in this case, first half of array
-  else{
-    entry[0] = &volume[volume->fat_offset + cluster];
-    entry[1] = &volume[volume->fat_offset + cluster];
-    entry[1] = entry[1]&0x0f;
-    next_cluster = &entry[0];
-  }
+//   if (cluster % 2){
+//     entry[0] = &volume[volume->fat_offset + cluster];
+//     entry[1] = &volume[volume->fat_offset + cluster];
+//     new_cluster = &entry[0];
+//     new_cluster = new_cluster>>4;
+//   }
+//   // cluster is even in this case, first half of array
+//   else{
+//     entry[0] = &volume[volume->fat_offset + cluster];
+//     entry[1] = &volume[volume->fat_offset + cluster];
+//     entry[1] = entry[1]&0x0f;
+//     new_cluster = &entry[0];
+//   }
 
   return 0;
 }
