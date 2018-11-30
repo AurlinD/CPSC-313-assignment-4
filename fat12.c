@@ -45,13 +45,13 @@ unsigned int read_unsigned_le(const char *buffer, int position, int num_bytes) {
  */
 fat12volume *open_volume_file(const char *filename) {
   FILE * fatd;
-  char buff;
+  char buff = malloc(sizeof(struct fat12volume));
   fatd = fopen(filename,"r");
   struct fat12volume *fat = malloc(sizeof(struct fat12volume));
   if (*filename != NULL){
 
     //char* buff = (char*) malloc(BOOT_SECTOR_SIZE);
-    setbuffer(fatd, buff, BOOT_SECTOR_SIZE);
+    setbuff(*filename, buff);
     // fseek(fatd,0,SEEK_END);
     // int size = ftell(fatd);
     // fseek(fatd,0,SEEK_SET);
