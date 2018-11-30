@@ -52,11 +52,11 @@ fat12volume *open_volume_file(const char *filename) {
 
     char* buff = (char*) malloc(BOOT_SECTOR_SIZE);
     //setbuff(*filename, buff);
-    // fseek(fatd,0,SEEK_END);
-    // int size = ftell(fatd);
-    // fseek(fatd,0,SEEK_SET);
-    // char * buff = malloc(size);
-    // setbuffer(fatd, buff,size);
+    fseek(fatd,0,SEEK_END);
+    int size = ftell(fatd);
+    fseek(fatd,0,SEEK_SET);
+    char * buff = malloc(size);
+    setbuffer(fatd, buff, size);
 
     
     if (fat->sector_size = read_unsigned_le(buff, 11, 1) == 0){
@@ -173,7 +173,9 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
 		 unsigned int num_sectors, char **buffer) {
   
   /* TO BE COMPLETED BY THE STUDENT */
-  unsigned int number = read_unsigned_le(**buffer, first_sector, num_sectors*512);
+  buffer = (char*) malloc(sizeof(struct fat12volume));
+  unsigned int number = read_unsigned_le(**buffer, first_sector * volume->sector_size, num_sectors*512);
+
 
   if ((number == NULL) || (num_sectors == 0)) {
     return 0;
@@ -206,12 +208,14 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
 int read_cluster(fat12volume *volume, unsigned int cluster, char **buffer) {
 
   /* TO BE COMPLETED BY THE STUDENT */
-    buffer = (char*) malloc(sizeof(struct fat12volume));
-
+    *buffer = (char*) malloc(sizeof(struct fat12volume));
+    // use fseek ()
+    // use fread 
+    // cluster size is in sectors
     setbuf(volume, buffer);
     char clusterData = read_unsigned_le(**buffer, (cluster + 2) * volume->cluster_size, volume->cluster_size);
     if (clusterData != 0) {
-        buffer = (char*) malloc(sizeof(clusterData));
+        *buffer = (char*) malloc(sizeof(clusterData));
         return sizeof(clusterData);
     }
     //buffer = NULL;
