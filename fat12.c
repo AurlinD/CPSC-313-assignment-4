@@ -50,7 +50,7 @@ fat12volume *open_volume_file(const char *filename) {
   struct fat12volume *fat = malloc(sizeof(struct fat12volume));
   if (*filename != NULL){
 
-    //char* buff = (char*) malloc(BOOT_SECTOR_SIZE);
+    char* buff = (char*) malloc(BOOT_SECTOR_SIZE);
     //setbuff(*filename, buff);
     // fseek(fatd,0,SEEK_END);
     // int size = ftell(fatd);
