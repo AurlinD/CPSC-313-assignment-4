@@ -61,56 +61,36 @@ fat12volume *open_volume_file(const char *filename) {
 
     
     fat->sector_size = read_unsigned_le(buff, 11, 2);
-    fprintf(stderr, fat->sector_size);
 
     fat->cluster_size = read_unsigned_le(buff, 13, 1);
-    fprintf(stderr, fat->cluster_size);
-
-    //fat->reserved_sectors = read_unsigned_le(buff, 14, 1);
-    //fprintf(stderr, fat->reserved_sectors);
-
-    // fat->hidden_sectors = read_unsigned_le(buff, 28, 2);
-    // fprintf(stderr, fat->hidden_sectors);
-
-    // fat->fat_num_sectors = read_unsigned_le(buff, 22, 2);
-    // fprintf(stderr, fat->fat_num_sectors);
-
-    // fat->fat_copies = read_unsigned_le(buff, 16 , 1);
-    // fprintf(stderr, fat->fat_copies);
-
-    // fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies;
-    // fprintf(stderr, fat->fat_offset);
-
-    // //fat->fat_array = read_unsigned_le(buff, 0, 512);
-    // //fprintf(stderr, fat->fat_array);
-
-    // fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies;
-    // fprintf(stderr, fat->rootdir_offset);
-
-    // fat->rootdir_entries = fat->sector_size / 32;
-    // fprintf(stderr, fat->rootdir_entries);
-
-    // //fat->rootdir_array = read_unsigned_le(buff, 0 , 32);
-    // //fprintf(stderr, fat->rootdir_array);
-
-    // fat->rootdir_num_sectors  = (fat->rootdir_entries / fat->sector_size);
-    // fprintf(stderr, fat->rootdir_num_sectors);
-
-    // fat->cluster_offset = (fat->cluster_size / fat->sector_size);
-    // fprintf(stderr, fat->cluster_offset);
 
 
+    fat->reserved_sectors = read_unsigned_le(buff, 14, 2);
 
+    fat->hidden_sectors = read_unsigned_le(buff, 28, 2);
 
-    //*fat = { .sector_size = sector_size, .cluster_size = cluster_size};
-    //fprintf(stderr, "Sector_size value is", fat->sector_size); 
-    //fprintf(stderr, "Cluster_size value is", fat->cluster_size); 
+    fat->fat_num_sectors = read_unsigned_le(buff, 22, 2);
 
-    
+    fat->fat_copies = read_unsigned_le(buff, 16 , 1);
+
+    fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies;
+
+    fat->fat_array = read_unsigned_le(buff, 0, 512);
+
+    fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies;
+
+    fat->rootdir_entries = fat->sector_size / 32;
+
+    fat->rootdir_array = read_unsigned_le(buff, 0 , 32);
+
+    fat->rootdir_num_sectors  = (fat->rootdir_entries / fat->sector_size);
+
+    fat->cluster_offset = (fat->cluster_size / fat->sector_size);
+
     return fat;
   }
 
-  return fat;
+  return NULL;
 
 }
 
