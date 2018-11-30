@@ -92,7 +92,7 @@ fat12volume *open_volume_file(const char *filename) {
         return fat;
     };
 
-    if((fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies)) == 0){
+    if((fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies) == 0){
         fprintf(stderr, "File is NULL 7\n");
         return fat;
     }
