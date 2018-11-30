@@ -44,20 +44,11 @@ unsigned int read_unsigned_le(const char *buffer, int position, int num_bytes) {
      smaller than necessary.
  */
 fat12volume *open_volume_file(const char *filename) {
-  FILE * fatd = fopen(filename,"r");
+  FILE * fatd = fopen(filename, "r");
   char* buff = (char*) malloc(BOOT_SECTOR_SIZE);
   struct fat12volume *fat = malloc(sizeof(struct fat12volume));
   fread(buff, BOOT_SECTOR_SIZE, 1, fatd);
 
-<<<<<<< HEAD
-    char* buff = (char*) malloc(BOOT_SECTOR_SIZE);
-    //setbuff(*filename, buff);
-    fseek(fatd,0,SEEK_END);
-    int size = ftell(fatd);
-    fseek(fatd,0,SEEK_SET);
-    char * buff = malloc(size);
-    setbuffer(fatd, buff, size);
-=======
   if (buff != NULL){
 
     // char* buff = (char*) malloc(BOOT_SECTOR_SIZE);
@@ -67,47 +58,46 @@ fat12volume *open_volume_file(const char *filename) {
     // fseek(fatd,0,SEEK_SET);
     // char * buff = malloc(size);
     // setbuffer(fatd, buff,size);
->>>>>>> 41da4fb1554f8dc940b7e3455256af040e2c3150
 
     
-    fat->sector_size = read_unsigned_le(buff, 11, 1);
+    fat->sector_size = read_unsigned_le(buff, 11, 2);
     fprintf(stderr, fat->sector_size);
 
-    //fat->cluster_size = read_unsigned_le(buff, 13, 1);
-    //fprintf(stderr, fat->cluster_size);
+    fat->cluster_size = read_unsigned_le(buff, 13, 1);
+    fprintf(stderr, fat->cluster_size);
 
     //fat->reserved_sectors = read_unsigned_le(buff, 14, 1);
     //fprintf(stderr, fat->reserved_sectors);
 
-    fat->hidden_sectors = read_unsigned_le(buff, 28, 2);
-    fprintf(stderr, fat->hidden_sectors);
+    // fat->hidden_sectors = read_unsigned_le(buff, 28, 2);
+    // fprintf(stderr, fat->hidden_sectors);
 
-    fat->fat_num_sectors = read_unsigned_le(buff, 22, 2);
-    fprintf(stderr, fat->fat_num_sectors);
+    // fat->fat_num_sectors = read_unsigned_le(buff, 22, 2);
+    // fprintf(stderr, fat->fat_num_sectors);
 
-    fat->fat_copies = read_unsigned_le(buff, 16 , 1);
-    fprintf(stderr, fat->fat_copies);
+    // fat->fat_copies = read_unsigned_le(buff, 16 , 1);
+    // fprintf(stderr, fat->fat_copies);
 
-    fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies;
-    fprintf(stderr, fat->fat_offset);
+    // fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies;
+    // fprintf(stderr, fat->fat_offset);
 
-    //fat->fat_array = read_unsigned_le(buff, 0, 512);
-    //fprintf(stderr, fat->fat_array);
+    // //fat->fat_array = read_unsigned_le(buff, 0, 512);
+    // //fprintf(stderr, fat->fat_array);
 
-    fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies;
-    fprintf(stderr, fat->rootdir_offset);
+    // fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies;
+    // fprintf(stderr, fat->rootdir_offset);
 
-    fat->rootdir_entries = fat->sector_size / 32;
-    fprintf(stderr, fat->rootdir_entries);
+    // fat->rootdir_entries = fat->sector_size / 32;
+    // fprintf(stderr, fat->rootdir_entries);
 
-    //fat->rootdir_array = read_unsigned_le(buff, 0 , 32);
-    //fprintf(stderr, fat->rootdir_array);
+    // //fat->rootdir_array = read_unsigned_le(buff, 0 , 32);
+    // //fprintf(stderr, fat->rootdir_array);
 
-    fat->rootdir_num_sectors  = (fat->rootdir_entries / fat->sector_size);
-    fprintf(stderr, fat->rootdir_num_sectors);
+    // fat->rootdir_num_sectors  = (fat->rootdir_entries / fat->sector_size);
+    // fprintf(stderr, fat->rootdir_num_sectors);
 
-    fat->cluster_offset = (fat->cluster_size / fat->sector_size);
-    fprintf(stderr, fat->cluster_offset);
+    // fat->cluster_offset = (fat->cluster_size / fat->sector_size);
+    // fprintf(stderr, fat->cluster_offset);
 
 
 
