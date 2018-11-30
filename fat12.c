@@ -59,66 +59,66 @@ fat12volume *open_volume_file(const char *filename) {
     // setbuffer(fatd, buff,size);
 
     
-    if (fat->sector_size = read_unsigned_le(buff, 11, 1) == NULL){
+    if (fat->sector_size = read_unsigned_le(buff, 11, 1) == 0){
         fprintf(stderr, "File is NULL 1\n");
         return fat; 
     }
 
-    if(fat->cluster_size = read_unsigned_le(buff, 13, 1) == NULL){
+    if(fat->cluster_size = read_unsigned_le(buff, 13, 1) == 0){
         fprintf(stderr, "File is NULL 2\n");
         return fat;
     }
 
-    if(fat->reserved_sectors = read_unsigned_le(buff, 14, 1) == NULL){
+    if(fat->reserved_sectors = read_unsigned_le(buff, 14, 1) == 0){
         fprintf(stderr, "File is NULL 3\n");
         return fat;
     }
 
-    if(fat->hidden_sectors = read_unsigned_le(buff, 28, 2) == NULL){
+    if(fat->hidden_sectors = read_unsigned_le(buff, 28, 2) == 0){
         fprintf(stderr, "File is NULL 4\n");
         return fat;
     }
 
-    if(fat->fat_num_sectors = read_unsigned_le(buff, 22, 2) == NULL){
+    if(fat->fat_num_sectors = read_unsigned_le(buff, 22, 2) == 0){
         fprintf(stderr, "File is NULL 5\n");
         return fat;
     };
 
-    if(fat->fat_copies = read_unsigned_le(buff, 16 , 1) == NULL){
+    if(fat->fat_copies = read_unsigned_le(buff, 16 , 1) == 0){
         fprintf(stderr, "File is NULL 6\n");
         return fat;
     };
 
-    if((fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies) == NULL){
+    if((fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies) == 0){
         fprintf(stderr, "File is NULL 7\n");
         return fat;
     }
 
-    if(fat->fat_array = read_unsigned_le(buff, 0, 512) == NULL){
+    if(fat->fat_array = read_unsigned_le(buff, 0, 512) == 0){
         fprintf(stderr, "File is NULL 8\n");
         return fat;
     }
 
-    if((fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies) == NULL){
+    if((fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies) == 0){
         fprintf(stderr, "File is NULL 9\n");
         return fat;
     } 
-    if((fat->rootdir_entries = fat->sector_size / 32) == NULL){
+    if((fat->rootdir_entries = fat->sector_size / 32) == 0){
         fprintf(stderr, "File is NULL 10\n");
         return fat;
     }
 
-    if(fat->rootdir_array = read_unsigned_le(buff, 0 , 32) == NULL){
+    if(fat->rootdir_array = read_unsigned_le(buff, 0 , 32) == 0){
         fprintf(stderr, "File is NULL 11\n");
         return fat;
     }
 
-    if(fat->rootdir_num_sectors  = (fat->rootdir_entries / fat->sector_size) == NULL){
+    if(fat->rootdir_num_sectors  = (fat->rootdir_entries / fat->sector_size) == 0){
         fprintf(stderr, "File is NULL 12\n");
         return fat;
     }
 
-    if((fat->cluster_offset = fat-> cluster_size / fat->sector_size) == NULL){
+    if((fat->cluster_offset = fat-> cluster_size / fat->sector_size) == 0){
         fprintf(stderr, "File is NULL 13\n");
         return fat;
     }
