@@ -248,14 +248,13 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
   int tempTime = read_unsigned_le(data, 22, 2);
   // returns little endian
   int tempDate = read_unsigned_le(data, 24, 2);
-  int tm_year = ( tempDate >> 9) + 80;
   struct tm newStruct = {
     .tm_sec = (tempTime & mask_sec) * 2,
 	  .tm_min = (tempTime & mask_min) >> 5,
 	  .tm_hour = tempTime >> 11,
-	  .tm_mday = (tempDate && mask_day),
+	  .tm_mday = (tempDate & mask_day),
 	  .tm_mon = (tempDate & mask_mon) >> 5,
-	  .tm_year = tm_year // FAT 1980 vs mktime 1900 starts
+	  .tm_year = (tempDate >> 9) + 80         // FAT 1980 vs mktime 1900 starts
   };
 
   entry->ctime = newStruct;
