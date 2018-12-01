@@ -122,14 +122,14 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
 		 unsigned int num_sectors, char **buffer) {
   
 
-  // initialize the buffer and 
+  // initialize the buffer and fread the volume_file into the buffer
   *buffer = (char*) malloc(num_sectors * volume->sector_size);
   fseek(volume->volume_file, first_sector * volume->sector_size, SEEK_SET);
   int ret = fread(*buffer, volume->sector_size, num_sectors, volume->volume_file);
   rewind(volume->volume_file);
 
+
   if (*buffer == NULL || num_sectors == 0) {
-    //*buffer = NULL;
     return 0;
   } else {
     return ret;
@@ -223,29 +223,30 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
 
   int i = 0;
   while (1) {
+    // at the end of the filename, add a NULL
     if (i == 11) {
       entry->filename[i + 1] = NULL;
       break;
-    }    
+    }
+    // if we reach spaces, its time to add a dot, and move to the 9th byte (where extension is)
     if (data[i] == " ") {
       entry->filename[i] = ".";
       i = 9;                  
     }
-    entry->filename[i] = data[i];
-    i++;
-    if (i == 11) {
-      entry->filename[i + 1] = NULL;
-      break;
-    }                  
+    entry->filename[i] = data[i];     // add next char to filename array
+    i++;                              // increment i     
   }
 
   int mask_sec = 0x1f;      // hexidecimal value to mask seconds  
   int mask_min = 0x7e0;     // hexidecimal value to mask minutes     
   int mask_mon = 0x1e0;     // hexidecimal value to mask months
   int mask_day = 0x1f;      // hexidecimal value to mask days
-  
+  // jump to the specific bytes the contain the information we need for time
   int tempTime = read_unsigned_le(data, 22, 2);
+  // jump to the specific bytes the contain the information we need for time
   int tempDate = read_unsigned_le(data, 24, 2);
+  // update the values of the struct by masking and shifting values to the 
+  // correct spots given in the data
   struct tm newStruct = {
     .tm_sec = (tempTime & mask_sec) * 2,
 	  .tm_min = (tempTime & mask_min) >> 5,
@@ -306,42 +307,44 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
   //     slash_counter ++;
   //   }
   // }
-    
-  // char *path = strok(path, "/");
-  // char *path_array[slash_counter];
+  
+  // use strok to remove the /'s      
+  char *path = strok(path, "/");
+  char *path_array[slash_counter];
 
-  // while (p != NULL){
-  //   path_array[i++] = p;
-  //   path = strok (NULL, "/");        
-  // }
+  while (path != NULL){
+    path_array[i++] = path;
+    path = strok (NULL, "/");        
+  }
  
-  // int i = 0;
-  // int p = 0;
+  int i = 0;
+  int p = 0;
 
-  // while (1) {
-  //   int numEntries = volume->rootdir_entries;
+  while (1) {
+    int numEntries = volume->rootdir_entries;
                                                
-  //   if (i > numEntries) {
-  //     i = 0;
-  //     p++;
-  //   }        
+    if (i > numEntries) {
+      i = 0;
+      if (p > path_array[p]) {
+        return -ENOENT;
+      }
+      p++;
+    }        
 
-  //   fill_directory_entry(volume->rootdir_array[i * DIR_ENTRY_SIZE], entry);
+    fill_directory_entry(volume->rootdir_array[i * DIR_ENTRY_SIZE], entry);
 
-  //   if (entry->filename == path[p]) {
-  //     if (!volume->is_directory) {
-  //       return 0;
-  //     }
-  //     return 0;
-  //   }
-  //   i++;
+    if (entry->filename == path[p]) {
+      if (!volume->is_directory) {
+        return 0;
+      }
+      read_cluster(volume, entry->first_cluster, &volume->rootdir_array);
+    }
+    i++;
 
-  // }
+    
 
-
-  // fill_directory_entry(fileEntry, entry);
+  }  
   
-  
-  // return -ENOENT;
+  return -ENOENT;
 }
 
