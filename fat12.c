@@ -309,12 +309,13 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
   // }
   
   // use strok to remove the /'s      
-  char *path = strok(path, "/");
+  char *po = strok(path, "/");
   char *path_array[slash_counter];
-
-  while (path != NULL){
-    path_array[i++] = path;
-    path = strok (NULL, "/");        
+  int a = 0;
+  while (po != NULL){
+    
+    path_array[a++] = po;
+    po = strok (NULL, "/");        
   }
  
   int i = 0;
@@ -334,7 +335,7 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
     fill_directory_entry(volume->rootdir_array[i * DIR_ENTRY_SIZE], entry);
 
     if (entry->filename == path[p]) {
-      if (!volume->is_directory) {
+      if (!entry->is_directory) {
         return 0;
       }
       read_cluster(volume, entry->first_cluster, &volume->rootdir_array);
