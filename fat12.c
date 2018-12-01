@@ -243,13 +243,12 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
   // first 8 bytes is name
   // dot
   // third 3 bytes is ext
-  // null   
-  int tempYear =    
+  // null      
   // returns little endian    
   int tempTime = read_unsigned_le(data, 22, 2);
   // returns little endian
   int tempDate = read_unsigned_le(data, 24, 2);
-  int tm_year = ( tempData >> 9) + 80;
+  int tm_year = ( tempDate >> 9) + 80;
   struct tm newStruct = {
     .tm_sec = (tempTime & mask_sec) * 2,
 	  .tm_min = (tempTime & mask_min) >> 5,
