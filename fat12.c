@@ -186,11 +186,11 @@ unsigned int get_next_cluster(fat12volume *volume, unsigned int cluster) {
        new_cluster = new_cluster>>4;
       }
     }
-//   // cluster is even in this case, first half of array
+  // cluster is even in this case, first half of array
     else{
       for (int i = 0; i<cluster; i++){
       entry[0] = &volume[volume->fat_offset + ((cluster/2)*3)];
-      entry[1] = &volume[volume->fat_offset + ((cluster/2)*3)+1];
+      entry[1] = &volume[volume->fat_offset + ((cluster/2)*3) +1];
       entry[1] = entry[1]&0x0f;
       new_cluster = &entry[0];
       }
@@ -219,23 +219,40 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
      a starting year, but the starting year is different between
      them. Make sure to take this into account when saving data into
      the entry. */
-  // struct dir_entry entry = malloc(sizeof(struct dir_entry));
-  // char* buff = (char*) malloc(DIR_ENTRY_SIZE);
-  // fread(buff, DIR_ENTRY_SIZE, 1, data);
+  struct dir_entry entry = malloc(sizeof(struct dir_entry));
+  char* buff = (char*) malloc(DIR_ENTRY_SIZE);
+  fread(buff, DIR_ENTRY_SIZE, 1, data);
+    
+  int mask_min = 0x7e0; // hexidecimal value to mask minutes   
+  int mask_mon = 0x1e0; // hexidecimal value to mask months
+  int mask_hour = 0xF800;
+  int mask_year = 0xFE00;
 
-  // entry->filename = read_unsigned_le(buff, 0, 11);
-  // tm tempTime = {
-  //   .tm_sec = read_unsigned_le(buff, 22, 2)		/* seconds after the minute [0-60] */
-	//   .tm_min;		/* minutes after the hour [0-59] */
-	//   .tm_hour;	/* hours since midnight [0-23] */
-	//   .tm_mday;	/* day of the month [1-31] */
-	//   .tm_mon;		/* months since January [0-11] */
-	//   .tm_year;	/* years since 1900 */
-	//   .tm_wday;	/* days since Sunday [0-6] */
-	//   .tm_yday;	/* days since January 1 [0-365] */
-	//   .tm_isdst;	/* Daylight Savings Time flag */
-  // }
-  // entry->ctime = tempTime;
+  
+  // entry->filename = read_unsigned_le(buff, 0, );
+  // first 8 bytes is name
+  // dot
+  // third 3 bytes is ext
+  // null
+
+  int tempTime = read_unsigned_le(buff, 22, 2);
+  int tempDate = read_unsigned_le(buff, 24, 2);
+  tm newStruct = {
+    .tm_sec = tempTime >> 11;
+	  .tm_min = (tempTime & mask_min) >> 5;
+	  .tm_hour = (tempTime & mask_hour;
+	  .tm_mday = tempDate >> 11;
+	  .tm_mon = (tempDate & mask_mon) >> 7;
+	  .tm_year = (tempDate & mask_year) >> 4 + 80; // FAT 1980 vs mktime 1900 starts
+  }
+
+  entry->ctime = newStruct;
+  
+  entry->size = read_unsigned_le(buff, 28, 4);
+
+  //entry->first_cluster = 
+
+  entry->is_directory = (entry->size == 0) ? 1 : 0
 
   
 }
