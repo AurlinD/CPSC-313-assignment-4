@@ -230,13 +230,14 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
   // entry->filename = read_unsigned_le(buff, 0, );
   int i = 0;
   while (1) {
-    if (buff[i] = " ") {
+    if (data[i] == " ") {
       entry->filename[i] = ".";
       i = 9;                  
     }
-    entry->filename[i] = buff[i];
+    entry->filename[i] = data[i];
     i++;
     if (i == 11) {
+      entry->filename[i + 1] = NULL;
       break;
     }                  
   }
@@ -250,12 +251,12 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
   // returns little endian
   int tempDate = read_unsigned_le(data, 24, 2);
   struct tm newStruct = {
-    .tm_sec = (tempTime & mask_sec) >> 11,
+    .tm_sec = (tempTime & mask_sec) * 2,
 	  .tm_min = (tempTime & mask_min) >> 5,
-	  .tm_hour = tempTime,
-	  .tm_mday = (tempDate && mask_day)>> 11,
-	  .tm_mon = (tempDate & mask_mon) >> 7,
-	  .tm_year = tempDate >> 4 + 80 // FAT 1980 vs mktime 1900 starts
+	  .tm_hour = tempTime >> 11,
+	  .tm_mday = (tempDate && mask_day),
+	  .tm_mon = (tempDate & mask_mon) >> 5,
+	  .tm_year = tempDate >> 9 + 80 // FAT 1980 vs mktime 1900 starts
   };
 
   entry->ctime = newStruct;
