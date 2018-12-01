@@ -219,7 +219,7 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
      a starting year, but the starting year is different between
      them. Make sure to take this into account when saving data into
      the entry. */
-  dir_entry entry = malloc(sizeof(struct dir_entry));
+  entry = malloc(sizeof(struct dir_entry));
   char* buff = (char*) malloc(DIR_ENTRY_SIZE);
   fread(buff, DIR_ENTRY_SIZE, 1, data);
     
@@ -244,7 +244,7 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
 	  .tm_mday = tempDate >> 11,
 	  .tm_mon = (tempDate & mask_mon) >> 7,
 	  .tm_year = (tempDate & mask_year) >> 4 + 80 // FAT 1980 vs mktime 1900 starts
-  }
+  };
 
   entry->ctime = newStruct;
   
@@ -252,7 +252,7 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
 
   //entry->first_cluster = 
 
-  entry->is_directory = (entry->size == 0) ? 1 : 0
+  entry->is_directory = (entry->size == 0) ? 1 : 0;
 
   
 }
