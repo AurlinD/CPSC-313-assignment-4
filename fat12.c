@@ -93,7 +93,7 @@ fat12volume *open_volume_file(const char *filename) {
  */
 void close_volume_file(fat12volume *volume) {
   
-  /* TO BE COMPLETED BY THE STUDENT */
+  // empty buffers for next use
   free(&volume->fat_array);
   free(&volume->rootdir_array);
   fclose(volume);
@@ -121,7 +121,8 @@ void close_volume_file(fat12volume *volume) {
 int read_sectors(fat12volume *volume, unsigned int first_sector,
 		 unsigned int num_sectors, char **buffer) {
   
-  /* TO BE COMPLETED BY THE STUDENT */
+
+  // initialize the buffer and 
   *buffer = (char*) malloc(num_sectors * volume->sector_size);
   fseek(volume->volume_file, first_sector * volume->sector_size, SEEK_SET);
   int ret = fread(*buffer, volume->sector_size, num_sectors, volume->volume_file);
@@ -222,6 +223,10 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
 
   int i = 0;
   while (1) {
+    if (i == 11) {
+      entry->filename[i + 1] = NULL;
+      break;
+    }    
     if (data[i] == " ") {
       entry->filename[i] = ".";
       i = 9;                  
@@ -293,14 +298,50 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
      GMT). */
   char* fileEntry = (char*) malloc(DIR_ENTRY_SIZE);
 
-  //fprintf(stderr, volume->rootdir_offset);
-  while (1) {
-    fill_directory_entry(volume->rootdir_offset, entry);
-  }
+  // count the number of / to find how many strings in total there are 
+  //  /foo/a/a contains 3 /'s and 3 seperate strings
+  // int slash_counter = 0;
+  // for (int i = 0; i<strlen(path); i++){
+  //   if (path[i] == "/"){
+  //     slash_counter ++;
+  //   }
+  // }
+    
+  // char *path = strok(path, "/");
+  // char *path_array[slash_counter];
 
-  fill_directory_entry(fileEntry, entry);
+  // while (p != NULL){
+  //   path_array[i++] = p;
+  //   path = strok (NULL, "/");        
+  // }
+ 
+  // int i = 0;
+  // int p = 0;
+
+  // while (1) {
+  //   int numEntries = volume->rootdir_entries;
+                                               
+  //   if (i > numEntries) {
+  //     i = 0;
+  //     p++;
+  //   }        
+
+  //   fill_directory_entry(volume->rootdir_array[i * DIR_ENTRY_SIZE], entry);
+
+  //   if (entry->filename == path[p]) {
+  //     if (!volume->is_directory) {
+  //       return 0;
+  //     }
+  //     return 0;
+  //   }
+  //   i++;
+
+  // }
+
+
+  // fill_directory_entry(fileEntry, entry);
   
   
-  return -ENOENT;
+  // return -ENOENT;
 }
 
