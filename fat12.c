@@ -136,7 +136,7 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
   rewind(volume->volume_file);
 
   if (*buffer == NULL || num_sectors == 0) {
-    *buffer = NULL;
+    //*buffer = NULL;
     return 0;
   } else {
     return sizeof(*buffer);
