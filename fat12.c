@@ -44,7 +44,8 @@ unsigned int read_unsigned_le(const char *buffer, int position, int num_bytes) {
      smaller than necessary.
  */
 fat12volume *open_volume_file(const char *filename) {
-  // intitialize the buffer, create space for the buffer, fread the data into the buffer to use
+  // open the file,intitialize the buffer 
+  // create space for the buffer, fread the data into the buffer to use
   FILE * fatd = fopen(filename, "r");
   char* buff = (char*) malloc(BOOT_SECTOR_SIZE);
   struct fat12volume *fat = malloc(sizeof(struct fat12volume));
@@ -94,7 +95,7 @@ fat12volume *open_volume_file(const char *filename) {
  */
 void close_volume_file(fat12volume *volume) {
   
-  // empty buffers for next use
+  //free buffers before closing volume
   free(&volume->fat_array);
   free(&volume->rootdir_array);
   fclose(volume);
@@ -119,6 +120,8 @@ void close_volume_file(fat12volume *volume) {
      end of the volume file, or read failed), it returns zero, and
      *buffer will be undefined.
  */
+
+
 int read_sectors(fat12volume *volume, unsigned int first_sector,
 		 unsigned int num_sectors, char **buffer) {
   
@@ -298,10 +301,9 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
      is not obtained from such an entry. In particular, the date/time
      for the root directory can be set to Unix time 0 (1970-01-01 0:00
      GMT). */
-  char* fileEntry = (char*) malloc(DIR_ENTRY_SIZE);
+  // char* fileEntry = (char*) malloc(DIR_ENTRY_SIZE);
 
   // count the number of / to find how many strings in total there are 
-  //  /foo/a/a contains 3 /'s and 3 seperate strings
   int slash_counter = 0;
   for (int b = 0; b<strlen(path); b++){
     if (path[b] == "/"){
@@ -309,13 +311,12 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
     }
   }
   
-  // use strtok to remove the /'s
-      
+  // use strtok to remove the /'s, and put each level into an array
   char *po = strtok(path, "/");
   char *path_array[slash_counter];
   int a = 0;
+  
   while (po != NULL){
-    
     path_array[a++] = po;
     po = strtok (NULL, "/");        
   }
@@ -324,27 +325,29 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
   int p = 0;
 
   while (1) {
-    int numEntries = volume->rootdir_entries;
-                                               
+    int numEntries = volume->rootdir_entries; // get total num of entries
+
+    // if i > num entries, reset i to 0, and if p > path array, file not found
     if (i > numEntries) {
       i = 0;
       if (p > path_array[p]) {
         return -ENOENT;                
       }
-      p++;      
+      p++;  // otherwise increment p and look into the next subdirectory 
     }        
                 
-    fill_directory_entry(volume->rootdir_array[i * DIR_ENTRY_SIZE], entry);
+    fill_directory_entry(volume->rootdir_array[i * DIR_ENTRY_SIZE], entry); // fill directory entry with i indexed rootdir_array
 
+    // if the entry filename is the same as the current path, and its not a subdirectory, we have found the correct file, and return 0
     if (entry->filename == path[p]) {
       if (!entry->is_directory) {
         return 0;        
       }
+      // otherwise, it is a subdirectory, which means we need to keep looking, so we update the rootdir_array to the next subdirectory
       read_cluster(volume, entry->first_cluster, &volume->rootdir_array);
-    }            
-    i++;
+    }     
 
-    
+    i++;  // increment i, so we can look through each rootdir_array entry       
             
   }  
   
