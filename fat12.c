@@ -44,6 +44,7 @@ unsigned int read_unsigned_le(const char *buffer, int position, int num_bytes) {
      smaller than necessary.
  */
 fat12volume *open_volume_file(const char *filename) {
+  // intitialize the buffer, create space for the buffer, fread the data into the buffer to use
   FILE * fatd = fopen(filename, "r");
   char* buff = (char*) malloc(BOOT_SECTOR_SIZE);
   struct fat12volume *fat = malloc(sizeof(struct fat12volume));
@@ -308,15 +309,15 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
     }
   }
   
-  // use strok to remove the /'s
+  // use strtok to remove the /'s
       
-  char *po = strok(path, "/");
+  char *po = strtok(path, "/");
   char *path_array[slash_counter];
   int a = 0;
   while (po != NULL){
     
     path_array[a++] = po;
-    po = strok (NULL, "/");        
+    po = strtok (NULL, "/");        
   }
  
   int i = 0;
