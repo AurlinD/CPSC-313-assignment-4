@@ -291,9 +291,12 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
      is not obtained from such an entry. In particular, the date/time
      for the root directory can be set to Unix time 0 (1970-01-01 0:00
      GMT). */
-  char *fileEntry = (char*) malloc(DIR_ENTRY_SIZE);
+  char* fileEntry = (char*) malloc(DIR_ENTRY_SIZE);
 
-  fprintf(stderr, volume->rootdir_offset);
+  //fprintf(stderr, volume->rootdir_offset);
+  while (1) {
+    fill_directory_entry(volume->rootdir_offset, entry);
+  }
 
   fill_directory_entry(fileEntry, entry);
   
