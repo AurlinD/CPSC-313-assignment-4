@@ -219,9 +219,7 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
      a starting year, but the starting year is different between
      them. Make sure to take this into account when saving data into
      the entry. */
-  //entry = malloc(sizeof(struct dir_entry));
- 
-  // entry->filename = read_unsigned_le(buff, 0, );
+
   int i = 0;
   while (1) {
     if (data[i] == " ") {
@@ -240,13 +238,8 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
   int mask_min = 0x7e0;     // hexidecimal value to mask minutes     
   int mask_mon = 0x1e0;     // hexidecimal value to mask months
   int mask_day = 0x1f;      // hexidecimal value to mask days
-  // first 8 bytes is name
-  // dot
-  // third 3 bytes is ext
-  // null      
-  // returns little endian    
+  
   int tempTime = read_unsigned_le(data, 22, 2);
-  // returns little endian
   int tempDate = read_unsigned_le(data, 24, 2);
   struct tm newStruct = {
     .tm_sec = (tempTime & mask_sec) * 2,
@@ -265,7 +258,6 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
 
   entry->is_directory = (entry->size == 0) ? 1 : 0;
 
-  
 }
 
 /* find_directory_entry: finds the directory entry associated to a
@@ -299,6 +291,8 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
      is not obtained from such an entry. In particular, the date/time
      for the root directory can be set to Unix time 0 (1970-01-01 0:00
      GMT). */
+  
+  
   return -ENOENT;
 }
 
