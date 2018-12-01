@@ -76,9 +76,7 @@ fat12volume *open_volume_file(const char *filename) {
 
     fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies;
 
-    fat->fat_array = read_sectors(fat->volume_file, 1, fat->fat_num_sectors, &readBuff);
-
-    free(readBuff);
+    read_sectors(fat->volume_file, 1, fat->fat_num_sectors, &fat->fat_array);
 
     fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies;
 
@@ -86,9 +84,7 @@ fat12volume *open_volume_file(const char *filename) {
 
     fat->rootdir_num_sectors  = (fat->rootdir_entries * 32 / fat->sector_size);
 
-    //fat->rootdir_array = read_sectors(fat->volume_file, fat->rootdir_offset, fat->rootdir_num_sectors, buff);
-
-    // free(readBuff);
+    //fat->rootdir_array = read_sectors(fat->volume_file, fat->rootdir_offset, fat->rootdir_num_sectors, &fat->rootdir_array);
 
     fat->cluster_offset = (fat->cluster_size / fat->sector_size);
 
@@ -107,8 +103,9 @@ fat12volume *open_volume_file(const char *filename) {
 void close_volume_file(fat12volume *volume) {
   
   /* TO BE COMPLETED BY THE STUDENT */
-
- fclose(volume);
+  free(&volume->fat_array);
+  free(&volume->rootdir_array);
+  fclose(volume);
 }
 
 /* read_sectors: Reads one or more contiguous sectors from the volume
