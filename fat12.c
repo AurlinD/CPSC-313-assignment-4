@@ -87,7 +87,7 @@ fat12volume *open_volume_file(const char *filename) {
     //read_sectors(fat->volume_file, fat->rootdir_offset, fat->rootdir_num_sectors, &fat->rootdir_array);
 
     // Start address for file: Address of data region + (Cluster number-2) * Sectors per cluster * Bytes per sector
-    fat->cluster_offset = (fat->rootdir_offset-2) +  (fat->rootdir_num_sectors * fat->sector_size);
+    fat->cluster_offset = (fat->fat_offset-2) +  (fat->rootdir_num_sectors / fat->sector_size);
 
     return fat;
   }
