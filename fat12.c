@@ -78,6 +78,8 @@ fat12volume *open_volume_file(const char *filename) {
 
     fat->fat_array = read_sectors(fat->volume_file, 1, fat->fat_num_sectors, buff);
 
+    free(buff);
+
     fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies;
 
     fat->rootdir_entries = read_unsigned_le(buff, 17 , 2);
@@ -85,6 +87,8 @@ fat12volume *open_volume_file(const char *filename) {
     fat->rootdir_num_sectors  = (fat->rootdir_entries * 32 / fat->sector_size);
 
     //fat->rootdir_array = read_sectors(fat->volume_file, fat->rootdir_offset, fat->rootdir_num_sectors, buff);
+
+    // free(buff);
 
     fat->cluster_offset = (fat->cluster_size / fat->sector_size);
 
