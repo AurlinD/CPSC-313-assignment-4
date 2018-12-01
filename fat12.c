@@ -179,17 +179,21 @@ unsigned int get_next_cluster(fat12volume *volume, unsigned int cluster) {
   uint32_t new_cluster;
   // if cluster is odd valued, last half of the array 
     if (cluster % 2){
-       entry[0] = &volume[volume->fat_offset + cluster];
-       entry[1] = &volume[volume->fat_offset + cluster];
+      for (int i= 0; i<cluster; i++){
+       entry[0] = &volume[volume->fat_offset + ((cluster/2)*3)];
+       entry[1] = &volume[volume->fat_offset + ((cluster/2)*3) +1];
        new_cluster = &entry[0];
        new_cluster = new_cluster>>4;
+      }
     }
 //   // cluster is even in this case, first half of array
     else{
-      entry[0] = &volume[volume->fat_offset + cluster];
-      entry[1] = &volume[volume->fat_offset + cluster];
+      for (int i = 0; i<cluster; i++){
+      entry[0] = &volume[volume->fat_offset + ((cluster/2)*3)];
+      entry[1] = &volume[volume->fat_offset + ((cluster/2)*3)+1];
       entry[1] = entry[1]&0x0f;
       new_cluster = &entry[0];
+      }
    }
 
   return 0;
@@ -220,7 +224,18 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
   // fread(buff, DIR_ENTRY_SIZE, 1, data);
 
   // entry->filename = read_unsigned_le(buff, 0, 11);
-  // entry->ctime = 
+  // tm tempTime = {
+  //   .tm_sec = read_unsigned_le(buff, 22, 2)		/* seconds after the minute [0-60] */
+	//   .tm_min;		/* minutes after the hour [0-59] */
+	//   .tm_hour;	/* hours since midnight [0-23] */
+	//   .tm_mday;	/* day of the month [1-31] */
+	//   .tm_mon;		/* months since January [0-11] */
+	//   .tm_year;	/* years since 1900 */
+	//   .tm_wday;	/* days since Sunday [0-6] */
+	//   .tm_yday;	/* days since January 1 [0-365] */
+	//   .tm_isdst;	/* Daylight Savings Time flag */
+  // }
+  // entry->ctime = tempTime;
 
   
 }
