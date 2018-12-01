@@ -131,7 +131,7 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
   
   /* TO BE COMPLETED BY THE STUDENT */
   *buffer = (char*) malloc(num_sectors * volume->sector_size);
-  fseek(volume->volume_file, first_sector * volume->sector_size, SEEK_SET);
+  fseek(volume->volume_file, first_sector + volume->sector_size, SEEK_SET);
   fread(*buffer, volume->sector_size, num_sectors, volume->volume_file);
   rewind(volume->volume_file);
 
@@ -166,23 +166,7 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
 int read_cluster(fat12volume *volume, unsigned int cluster, char **buffer) {
 
   /* TO BE COMPLETED BY THE STUDENT */
-    // use fseek ()
-    // fseek(volume, cluster * volume->cluster_size)
-    // use fread 
-    // cluster size is in sectors
-    // setbuf(volume, buffer);
-    //*buffer = (char*) malloc(volume->cluster_size);
-    // fseek(volume->volume_file, cluster, SEEK_SET);
-    return read_sectors(volume->volume_file, volume->cluster_offset + (volume->cluster_size*volume->sector_size), volume->cluster_size, *buffer);
-    // fread(buffer, volume->cluster_size, 1, volume->volume_file);
-    // rewind(volume->volume_file);
-
-    // if (*buffer == NULL) {
-    //   *buffer = NULL;
-    //   return 0;
-    // } else {
-    //   return sizeof(*buffer);
-    // }
+  return read_sectors(volume->volume_file, volume->cluster_offset + (volume->cluster_size*volume->sector_size), volume->cluster_size, *buffer);
 }
 
 /* get_next_cluster: Finds, in the file allocation table, the number
