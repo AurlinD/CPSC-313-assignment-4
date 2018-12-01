@@ -76,7 +76,7 @@ fat12volume *open_volume_file(const char *filename) {
 
     fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies;
 
-    read_sectors(fat->volume_file, 1, fat->fat_num_sectors, &fat->fat_array);
+    //read_sectors(fat->volume_file, 1, fat->fat_num_sectors, &fat->fat_array);
 
     fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies;
 
