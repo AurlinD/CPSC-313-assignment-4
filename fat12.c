@@ -51,15 +51,6 @@ fat12volume *open_volume_file(const char *filename) {
 
   if (buff != NULL){
 
-    char* readBuff;
-    // setbuff(*filename, buff);
-    // fseek(fatd,0,SEEK_END);
-    // int size = ftell(fatd);
-    // fseek(fatd,0,SEEK_SET);
-    // char * buff = malloc(size);
-    // setbuffer(fatd, buff,size);
-
-
     fat->volume_file = fatd;
     
     fat->sector_size = read_unsigned_le(buff, 11, 2);
@@ -187,19 +178,19 @@ unsigned int get_next_cluster(fat12volume *volume, unsigned int cluster) {
   unsigned char entry[2];
   uint32_t new_cluster;
   // if cluster is odd valued, last half of the array 
-//   if (cluster % 2){
-//     entry[0] = &volume[volume->fat_offset + cluster];
-//     entry[1] = &volume[volume->fat_offset + cluster];
-//     new_cluster = &entry[0];
-//     new_cluster = new_cluster>>4;
-//   }
+    if (cluster % 2){
+       entry[0] = &volume[volume->fat_offset + cluster];
+       entry[1] = &volume[volume->fat_offset + cluster];
+       new_cluster = &entry[0];
+       new_cluster = new_cluster>>4;
+    }
 //   // cluster is even in this case, first half of array
-//   else{
-//     entry[0] = &volume[volume->fat_offset + cluster];
-//     entry[1] = &volume[volume->fat_offset + cluster];
-//     entry[1] = entry[1]&0x0f;
-//     new_cluster = &entry[0];
-//   }
+    else{
+      entry[0] = &volume[volume->fat_offset + cluster];
+      entry[1] = &volume[volume->fat_offset + cluster];
+      entry[1] = entry[1]&0x0f;
+      new_cluster = &entry[0];
+   }
 
   return 0;
 }
@@ -224,6 +215,14 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
      a starting year, but the starting year is different between
      them. Make sure to take this into account when saving data into
      the entry. */
+  // struct dir_entry entry = malloc(sizeof(struct dir_entry));
+  // char* buff = (char*) malloc(DIR_ENTRY_SIZE);
+  // fread(buff, DIR_ENTRY_SIZE, 1, data);
+
+  // entry->filename = read_unsigned_le(buff, 0, 11);
+  // entry->ctime = 
+
+  
 }
 
 /* find_directory_entry: finds the directory entry associated to a
