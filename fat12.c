@@ -219,14 +219,14 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
      a starting year, but the starting year is different between
      them. Make sure to take this into account when saving data into
      the entry. */
-  struct dir_entry entry = malloc(sizeof(struct dir_entry));
+  dir_entry entry = malloc(sizeof(struct dir_entry));
   char* buff = (char*) malloc(DIR_ENTRY_SIZE);
   fread(buff, DIR_ENTRY_SIZE, 1, data);
     
-  int mask_min = 0x7e0; // hexidecimal value to mask minutes   
-  int mask_mon = 0x1e0; // hexidecimal value to mask months
-  int mask_hour = 0xF800;
-  int mask_year = 0xFE00;
+  int mask_min = 0x7e0;     // hexidecimal value to mask minutes   
+  int mask_mon = 0x1e0;     // hexidecimal value to mask months
+  int mask_hour = 0xF800;   // hexidecimal value to mask hours
+  int mask_year = 0xFE00;   // hexidecimal value to mask year
 
   
   // entry->filename = read_unsigned_le(buff, 0, );
@@ -237,13 +237,13 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
 
   int tempTime = read_unsigned_le(buff, 22, 2);
   int tempDate = read_unsigned_le(buff, 24, 2);
-  tm newStruct = {
-    .tm_sec = tempTime >> 11;
-	  .tm_min = (tempTime & mask_min) >> 5;
-	  .tm_hour = (tempTime & mask_hour;
-	  .tm_mday = tempDate >> 11;
-	  .tm_mon = (tempDate & mask_mon) >> 7;
-	  .tm_year = (tempDate & mask_year) >> 4 + 80; // FAT 1980 vs mktime 1900 starts
+  struct tm newStruct = {
+    .tm_sec = tempTime >> 11,
+	  .tm_min = (tempTime & mask_min) >> 5,
+	  .tm_hour = (tempTime & mask_hour),
+	  .tm_mday = tempDate >> 11,
+	  .tm_mon = (tempDate & mask_mon) >> 7,
+	  .tm_year = (tempDate & mask_year) >> 4 + 80 // FAT 1980 vs mktime 1900 starts
   }
 
   entry->ctime = newStruct;
