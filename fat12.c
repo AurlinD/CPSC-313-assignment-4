@@ -356,6 +356,6 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
   //   i++;  // increment i, so we can look through each rootdir_array entry       
             
   // }  
-
+    return -ENOENT;
 }
 
