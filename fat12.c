@@ -131,7 +131,7 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
   
   /* TO BE COMPLETED BY THE STUDENT */
   *buffer = (char*) malloc(num_sectors * volume->sector_size);
-  fseek(volume->volume_file, first_sector * volume->fat_offset, SEEK_SET);
+  fseek(volume->volume_file, volume->fat_offset + (first_sector * volume->sector_size), SEEK_SET);
   fread(*buffer, volume->sector_size, num_sectors, volume->volume_file);
   rewind(volume->volume_file);
 
