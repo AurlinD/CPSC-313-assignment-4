@@ -302,7 +302,7 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
   // count the number of / to find how many strings in total there are 
   //  /foo/a/a contains 3 /'s and 3 seperate strings
   int slash_counter = 0;
-  for (int b = 0; i<strlen(path); b++){
+  for (int b = 0; b<strlen(path); b++){
     if (path[b] == "/"){
       slash_counter++;
     }
@@ -328,23 +328,23 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
     if (i > numEntries) {
       i = 0;
       if (p > path_array[p]) {
-        return -ENOENT;
+        return -ENOENT;                
       }
-      p++;
+      p++;      
     }        
-
+                
     fill_directory_entry(volume->rootdir_array[i * DIR_ENTRY_SIZE], entry);
 
     if (entry->filename == path[p]) {
       if (!entry->is_directory) {
-        return 0;
+        return 0;        
       }
       read_cluster(volume, entry->first_cluster, &volume->rootdir_array);
-    }
+    }            
     i++;
 
     
-
+            
   }  
   
   return -ENOENT;
