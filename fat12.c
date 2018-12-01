@@ -301,14 +301,15 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
 
   // count the number of / to find how many strings in total there are 
   //  /foo/a/a contains 3 /'s and 3 seperate strings
-  // int slash_counter = 0;
-  // for (int i = 0; i<strlen(path); i++){
-  //   if (path[i] == "/"){
-  //     slash_counter ++;
-  //   }
-  // }
+  int slash_counter = 0;
+  for (int b = 0; i<strlen(path); b++){
+    if (path[b] == "/"){
+      slash_counter++;
+    }
+  }
   
-  // use strok to remove the /'s      
+  // use strok to remove the /'s
+      
   char *po = strok(path, "/");
   char *path_array[slash_counter];
   int a = 0;
