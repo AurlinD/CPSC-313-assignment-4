@@ -221,7 +221,8 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
      the entry. */
   //entry = malloc(sizeof(struct dir_entry));
   char* buff = (char*) malloc(DIR_ENTRY_SIZE);
-  fread(buff, DIR_ENTRY_SIZE, 1, data);
+  FILE * dirEnt = fopen(data, "r");
+  fread(buff, DIR_ENTRY_SIZE, 1, dirEnt);
     
   int mask_min = 0x7e0;     // hexidecimal value to mask minutes   
   int mask_mon = 0x1e0;     // hexidecimal value to mask months
