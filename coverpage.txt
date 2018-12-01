@@ -63,4 +63,5 @@ Unix Id : e1d0b
 Email: sgao1996@gmail.com
 
 
-ACKNOWLEDGMENTS :
+ACKNOWLEDGMENTS : A lot of tutorialpoint C function explanations and stackoverflow
+                  Went to office hours and tutorials almost every day this week

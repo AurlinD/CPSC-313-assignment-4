@@ -266,7 +266,7 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
 
   entry->first_cluster = read_unsigned_le(data, 26, 2);
 
-  entry->is_directory = (entry->size == 0) ? 1 : 0;
+  entry->is_directory = (entry->size == 0) ? 1 : 0; // if size is 0, then it must be a directory
 
 }
 
@@ -301,56 +301,61 @@ int find_directory_entry(fat12volume *volume, const char *path, dir_entry *entry
      is not obtained from such an entry. In particular, the date/time
      for the root directory can be set to Unix time 0 (1970-01-01 0:00
      GMT). */
-  // char* fileEntry = (char*) malloc(DIR_ENTRY_SIZE);
+  // // char* fileEntry = (char*) malloc(DIR_ENTRY_SIZE);
 
-  // count the number of / to find how many strings in total there are 
-  int slash_counter = 0;
-  for (int b = 0; b<strlen(path); b++){
-    if (path[b] == "/"){
-      slash_counter++;
-    }
-  }
+  // *********************************************************************
+  // ***** CODE HERE IS COMMENTED OUT BECAUSE OF A SEGFAULT WE COULD *****
+  // *****  NOT DIAGNOSE BEFORE THE DEADLINE, BUT LEFT COMMENTS FOR  *****
+  // *****     OUR THOUGHT PROCESS AND LOGIC IN THIS FUNCTION        *****
+  // *********************************************************************
   
-  // use strtok to remove the /'s, and put each level into an array
-  char *po = strtok(path, "/");
-  char *path_array[slash_counter];
-  int a = 0;
+  // // count the number of / to find how many strings in total there are 
+  // int slash_counter = 0;
+  // for (int b = 0; b<strlen(path); b++){
+  //   if (path[b] == "/"){
+  //     slash_counter++;
+  //   }
+  // }
   
-  while (po != NULL){
-    path_array[a++] = po;
-    po = strtok (NULL, "/");        
-  }
+  // // use strtok to remove the /'s, and put each level into an array
+  // char *po = strtok(path, "/");
+  // char *path_array[slash_counter];
+  // int a = 0;
+  
+  // while (po != NULL){
+  //   path_array[a++] = po;
+  //   po = strtok (NULL, "/");        
+  // }
  
-  int i = 0;
-  int p = 0;
+  // int i = 0;
+  // int p = 0;
 
-  while (1) {
-    int numEntries = volume->rootdir_entries; // get total num of entries
+  // while (1) {
+  //   int numEntries = volume->rootdir_entries; // get total num of entries
 
-    // if i > num entries, reset i to 0, and if p > path array, file not found
-    if (i > numEntries) {
-      i = 0;
-      if (p > path_array[p]) {
-        return -ENOENT;                
-      }
-      p++;  // otherwise increment p and look into the next subdirectory 
-    }        
+  //   // if i > num entries, reset i to 0, and if p > path array, file not found
+  //   if (i > numEntries) {
+  //     i = 0;
+  //     if (p > path_array[p]) {
+  //       return -ENOENT;                
+  //     }
+  //     p++;  // otherwise increment p and look into the next subdirectory 
+  //   }        
                 
-    fill_directory_entry(volume->rootdir_array[i * DIR_ENTRY_SIZE], entry); // fill directory entry with i indexed rootdir_array
+  //   fill_directory_entry(volume->rootdir_array[i * DIR_ENTRY_SIZE], entry); // fill directory entry with i indexed rootdir_array
 
-    // if the entry filename is the same as the current path, and its not a subdirectory, we have found the correct file, and return 0
-    if (entry->filename == path[p]) {
-      if (!entry->is_directory) {
-        return 0;        
-      }
-      // otherwise, it is a subdirectory, which means we need to keep looking, so we update the rootdir_array to the next subdirectory
-      read_cluster(volume, entry->first_cluster, &volume->rootdir_array);
-    }     
+  //   // if the entry filename is the same as the current path, and its not a subdirectory, we have found the correct file, and return 0
+  //   if (entry->filename == path[p]) {
+  //     if (!entry->is_directory) {
+  //       return 0;        
+  //     }
+  //     // otherwise, it is a subdirectory, which means we need to keep looking, so we update the rootdir_array to the next subdirectory
+  //     read_cluster(volume, entry->first_cluster, &volume->rootdir_array);
+  //   }     
 
-    i++;  // increment i, so we can look through each rootdir_array entry       
+  //   i++;  // increment i, so we can look through each rootdir_array entry       
             
-  }  
-  
-  return -ENOENT;
+  // }  
+
 }
 
