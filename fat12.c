@@ -74,19 +74,19 @@ fat12volume *open_volume_file(const char *filename) {
 
     fat->fat_copies = read_unsigned_le(buff, 16 , 1);
 
-    fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies;
+    fat->fat_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies;
 
-    //read_sectors(fat->volume_file, 1, fat->fat_num_sectors, &fat->fat_array);
+    read_sectors(fat, 1, fat->fat_num_sectors, &fat->fat_array);
 
-    fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies;
+    fat->rootdir_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies;
 
     fat->rootdir_entries = read_unsigned_le(buff, 17 , 2);
 
     fat->rootdir_num_sectors  = (fat->rootdir_entries * 32 / fat->sector_size);
 
-    //fat->rootdir_array = read_sectors(fat->volume_file, fat->rootdir_offset, fat->rootdir_num_sectors, &fat->rootdir_array);
+    //read_sectors(fat->volume_file, fat->rootdir_offset, fat->rootdir_num_sectors, &fat->rootdir_array);
 
-    fat->cluster_offset = (fat->cluster_size / fat->sector_size);
+    fat->cluster_offset = fat->fat_offset + fat->rootdir_offset - (2 * (fat->cluster_size / fat->sector_size));
 
     return fat;
   }
@@ -167,7 +167,7 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
 int read_cluster(fat12volume *volume, unsigned int cluster, char **buffer) {
 
   /* TO BE COMPLETED BY THE STUDENT */
-  return read_sectors(volume->volume_file, volume->cluster_offset + (volume->cluster_size*volume->sector_size), volume->cluster_size, *buffer);
+  return read_sectors(volume->volume_file, volume->cluster_offset + (volume->cluster_size*volume->sector_size), volume->cluster_size, buffer);
 }
 
 /* get_next_cluster: Finds, in the file allocation table, the number
