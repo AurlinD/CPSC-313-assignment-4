@@ -76,7 +76,7 @@ fat12volume *open_volume_file(const char *filename) {
 
     fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies;
 
-    fat->fat_array = read_sectors(fat->volume_file, fat->fat_offset, fat->fat_num_sectors, buff);
+    fat->fat_array = read_sectors(fat->volume_file, 1 , fat->fat_num_sectors, buff);
 
     fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies;
 
@@ -84,7 +84,7 @@ fat12volume *open_volume_file(const char *filename) {
 
     fat->rootdir_num_sectors  = (fat->rootdir_entries * 32 / fat->sector_size);
 
-    fat->rootdir_array = read_sectors(fat->volume_file, fat->rootdir_offset, fat->rootdir_num_sectors, buff);
+    //fat->rootdir_array = read_sectors(fat->volume_file, fat->rootdir_offset, fat->rootdir_num_sectors, buff);
 
     fat->cluster_offset = (fat->cluster_size / fat->sector_size);
 
@@ -131,7 +131,7 @@ int read_sectors(fat12volume *volume, unsigned int first_sector,
   
   /* TO BE COMPLETED BY THE STUDENT */
   *buffer = (char*) malloc(num_sectors * volume->sector_size);
-  fseek(volume->volume_file, first_sector + volume->sector_size, SEEK_SET);
+  fseek(volume->volume_file, first_sector * volume->fat_offset, SEEK_SET);
   fread(*buffer, volume->sector_size, num_sectors, volume->volume_file);
   rewind(volume->volume_file);
 
