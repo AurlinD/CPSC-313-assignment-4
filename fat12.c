@@ -51,7 +51,7 @@ fat12volume *open_volume_file(const char *filename) {
 
   if (buff != NULL){
 
-    // char* buff = (char*) malloc(BOOT_SECTOR_SIZE);
+    char* readBuff;
     // setbuff(*filename, buff);
     // fseek(fatd,0,SEEK_END);
     // int size = ftell(fatd);
@@ -76,9 +76,9 @@ fat12volume *open_volume_file(const char *filename) {
 
     fat->fat_offset = fat->reserved_sectors + fat->fat_num_sectors * fat->fat_copies;
 
-    fat->fat_array = read_sectors(fat->volume_file, 1, fat->fat_num_sectors, buff);
+    fat->fat_array = read_sectors(fat->volume_file, 1, fat->fat_num_sectors, &readBuff);
 
-    free(buff);
+    free(readBuff);
 
     fat->rootdir_offset = fat->reserved_sectors + fat->rootdir_num_sectors * fat->fat_copies;
 
@@ -88,7 +88,7 @@ fat12volume *open_volume_file(const char *filename) {
 
     //fat->rootdir_array = read_sectors(fat->volume_file, fat->rootdir_offset, fat->rootdir_num_sectors, buff);
 
-    // free(buff);
+    // free(readBuff);
 
     fat->cluster_offset = (fat->cluster_size / fat->sector_size);
 
