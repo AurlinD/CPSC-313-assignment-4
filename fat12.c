@@ -220,9 +220,6 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
      them. Make sure to take this into account when saving data into
      the entry. */
   //entry = malloc(sizeof(struct dir_entry));
-  char* buff = (char*) malloc(DIR_ENTRY_SIZE);
-  FILE * dirEnt = fopen(data, "r");
-  fread(buff, DIR_ENTRY_SIZE, 1, dirEnt);
     
   int mask_min = 0x7e0;     // hexidecimal value to mask minutes   
   int mask_mon = 0x1e0;     // hexidecimal value to mask months
@@ -236,8 +233,8 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
   // third 3 bytes is ext
   // null
 
-  int tempTime = read_unsigned_le(buff, 22, 2);
-  int tempDate = read_unsigned_le(buff, 24, 2);
+  int tempTime = read_unsigned_le(data, 22, 2);
+  int tempDate = read_unsigned_le(data, 24, 2);
   struct tm newStruct = {
     .tm_sec = tempTime >> 11,
 	  .tm_min = (tempTime & mask_min) >> 5,
@@ -249,9 +246,9 @@ void fill_directory_entry(const char *data, dir_entry *entry) {
 
   entry->ctime = newStruct;
   
-  entry->size = read_unsigned_le(buff, 28, 4);
+  entry->size = read_unsigned_le(data, 28, 4);
 
-  //entry->first_cluster = 
+  entry->first_cluster = read_unsigned_le(data, 26, 2);
 
   entry->is_directory = (entry->size == 0) ? 1 : 0;
 
