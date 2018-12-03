@@ -1,0 +1,114 @@
+Total before late penalty: [ /50]
+
+
+  Part 1: reading and interpreting the volume data [ /12]
+  ------------------------------------------------
+
+    open_volume_file:
+        The code should successfully read the first 512 bytes of the file   [  /1]
+        All of the requested information is stored in fat12volume correctly [  /2]
+        FAT and root directory are loaded into the structure                [  /1]
+        In case of error, NULL is returned                                  [  /1]
+
+    close_volume_file:
+        All dynamically allocated data is freed, including the volume       [  /1]
+        File pointer/descriptor is properly closed                          [  /1]
+
+    read_sectors:
+        Seeks to correct position                                           [  /1]
+        Allocates buffer for reading                                        [  /1]
+        Reads bytes from file correctly                                     [  /1]
+        Correct return value (0 or -1 if error, number of bytes if success) [  /1]
+
+    get_next_cluster:
+        Correct retrieval of data from FAT                                  [  /1]
+
+
+  Part 2: path resolution and data retrieval [ /18]
+  ------------------------------------------
+
+    fill_directory_entry:
+        Correctly encodes the file name and extension as a string           [  /2]
+        Correctly reads the last write date and time fields                 [  /2]
+        Correctly reads the directory flag, size and first cluster          [  /1]
+
+    find_directory_entry:
+        Code works correctly for: root directory                            [  /1]
+        Code works correctly for: file directly in root directory           [  /2]
+        Code works correctly for: file in first cluster of subdirectory     [  /2]
+        Code works correctly for: file in latter cluster of subdirectory    [  /1]
+        Code works correctly for: file in two levels of subdirectory        [  /1]
+        Correct error handling: file not found (-ENOENT)                    [  /1]
+        Correct error handling: component in path not found (-ENOENT)       [  /1]
+        Correct error handling: component in path not dir (-ENOTDIR)        [  /1]
+        Correct error handling: error reading cluster (-EIO)                [  /1]
+        Special cases for file name: 0x05 converts to 0xe5, 0xe5 is ignored [  /1]
+	Correctly stops reading when file name starts with 0x00	    	    [  /1]
+
+  Part 3: file system implementation [ /15]
+  ----------------------------------
+
+    fat12_getattr:
+        Call to find_directory_entry and return value based on it           [  /1]
+        Proper update of mode, size, ctime, mtime, blksize, blocks          [  /1]
+
+
+    fat12_readdir:
+        Call to find_directory_entry and return value based on it           [  /1]
+             - Must return error if not directory
+        Properly reads directory data from either root data or cluster      [  /1]
+        Properly moves to next cluster when needed                          [  /1]
+        Finds each entry in directory, ignoring or stopping based on name   [  /1]
+        Call to filler function based on proper file name                   [  /1]
+
+    fat12_open:
+        Call to find_directory_entry and return value based on it           [  /1]
+        Returns error if opening for write or opening directory             [  /1]
+
+    fat12_read:
+        Obtains file size and first cluster (either through call to
+            find_directory_entry or from data passed through fi->fh)        [  /1]
+        Finds cluster based on offset and FAT                               [  /1]
+        Reads data based on size parameter                                  [  /1]
+        Stops reading if requested offset+size is larger than file size     [  /1]
+        Keeps reading if requested size is larger than cluster              [  /1]
+        Correct return value                                                [  /1]
+
+
+  Coding style and documentation [ /3]
+  ------------------------------
+
+        - code is properly indented, easy to understand, with
+          meaningful variable names [/1]
+
+        - all allocated space and open files are freed and closed [/1]
+
+	- the code is reasonably efficient [ /1]
+            * for instance, the boot sector and FAT are read into buffers and
+              information extracted  from these  buffers, instead of  doing a
+              large number of read() operations on 1 or 2 bytes each.
+
+
+
+  Readme.txt [ /2]
+  ----------
+
+
+
+
+  Bonus [ /17]
+  -----
+  
+      * OBS: No partial marks awarded
+
+      - support for multi-threaded operations [ /2]
+        * implies no race condition or deadlock. In some cases a mutex protection
+          in read_sectors suffices, but this depends on the implementation.
+      
+      - proper implementation of writing to a new or existing file [ /3]
+      - proper implementation of creating a new directory [ /2]
+      - proper implementation of deleting an existing file or directory [ /3]
+      - proper implementation of renaming or moving a file or directory [ /2]
+
+      - support for VFAT, FAT16, FAT32 or equivalent [ /5]
+
