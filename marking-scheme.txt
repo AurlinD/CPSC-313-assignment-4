@@ -1,7 +1,7 @@
-Total before late penalty: [4.00 /50]
+Total before late penalty: [10.5/50]
 
 
-  Part 1: reading and interpreting the volume data [ /12]
+  Part 1: reading and interpreting the volume data [3.5/12]
   ------------------------------------------------
 
     open_volume_file:
@@ -11,8 +11,9 @@ Total before late penalty: [4.00 /50]
         In case of error, NULL is returned                                  [0.00  /1]
 
     close_volume_file:
-        All dynamically allocated data is freed, including the volume       [  /1]
-        File pointer/descriptor is properly closed                          [  /1]
+        All dynamically allocated data is freed, including the volume       [0.5/1]
+        	-0.5 does not free instance of fat12volume struct
+        File pointer/descriptor is properly closed                          [1/1]
 
     read_sectors:
         Seeks to correct position                                           [0.00  /1]
@@ -24,7 +25,7 @@ Total before late penalty: [4.00 /50]
         Correct retrieval of data from FAT                                  [0.00  /1]
 
 
-  Part 2: path resolution and data retrieval [ /18]
+  Part 2: path resolution and data retrieval [0/18]
   ------------------------------------------
 
     fill_directory_entry:
@@ -45,7 +46,7 @@ Total before late penalty: [4.00 /50]
         Special cases for file name: 0x05 converts to 0xe5, 0xe5 is ignored [0.00  /1]
 	Correctly stops reading when file name starts with 0x00	    	    [0.00  /1]
 
-  Part 3: file system implementation [ /15]
+  Part 3: file system implementation [2/15]
   ----------------------------------
 
     fat12_getattr:
@@ -54,12 +55,12 @@ Total before late penalty: [4.00 /50]
 
 
     fat12_readdir:
-        Call to find_directory_entry and return value based on it           [  /1]
+        Call to find_directory_entry and return value based on it           [0/1]
              - Must return error if not directory
-        Properly reads directory data from either root data or cluster      [  /1]
-        Properly moves to next cluster when needed                          [  /1]
-        Finds each entry in directory, ignoring or stopping based on name   [  /1]
-        Call to filler function based on proper file name                   [  /1]
+        Properly reads directory data from either root data or cluster      [0/1]
+        Properly moves to next cluster when needed                          [0/1]
+        Finds each entry in directory, ignoring or stopping based on name   [0/1]
+        Call to filler function based on proper file name                   [0/1]
 
     fat12_open:
         Call to find_directory_entry and return value based on it+          [1.00  /1]
@@ -75,28 +76,28 @@ Total before late penalty: [4.00 /50]
         Correct return value*                                               [0.00  /1]
 
 
-  Coding style and documentation [ /3]
+  Coding style and documentation [3/3]
   ------------------------------
 
         - code is properly indented, easy to understand, with
-          meaningful variable names [/1]
+          meaningful variable names [1/1]
 
-        - all allocated space and open files are freed and closed [/1]
+        - all allocated space and open files are freed and closed [1/1]
 
-	- the code is reasonably efficient [ /1]
+	- the code is reasonably efficient [1/1]
             * for instance, the boot sector and FAT are read into buffers and
               information extracted  from these  buffers, instead of  doing a
               large number of read() operations on 1 or 2 bytes each.
 
 
 
-  Readme.txt [ /2]
+  Readme.txt [2/2]
   ----------
 
 
 
 
-  Bonus [ /17]
+  Bonus [0/17]
   -----
   
       * OBS: No partial marks awarded
