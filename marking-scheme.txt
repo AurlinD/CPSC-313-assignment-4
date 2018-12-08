@@ -1,5 +1,4 @@
 Total before late penalty: [10.5/50]
-    ***Total after 97.86% late penalty is 0.22
 
 
   Part 1: reading and interpreting the volume data [3.5/12]
@@ -113,5 +112,6 @@ Total before late penalty: [10.5/50]
       - proper implementation of renaming or moving a file or directory [ /2]
 
       - support for VFAT, FAT16, FAT32 or equivalent [ /5]
+
 
 
